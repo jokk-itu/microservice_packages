@@ -31,4 +31,4 @@ jobs:
     - name: push packages to github nuget registry
       run: |
         cors_package=$(ls $CORS/bin/$CONFIGURATION/*nupkg)
-        dotnet nuget push "$CORS/bin/$CONFIGURATION/$cors_package" --source "github" --skip-duplicate
+        dotnet nuget push "$cors_package" --source "github" --skip-duplicate
