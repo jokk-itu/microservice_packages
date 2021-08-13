@@ -26,7 +26,6 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build -c $CONFIGURATION --no-restore
-      working-directory: $CORS
       
   nuget:
     runs-on: ubuntu-latest
