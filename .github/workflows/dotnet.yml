@@ -26,17 +26,9 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build -c $CONFIGURATION --no-restore
-      
-  nuget:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-    - name: Authenticate to Github nuget registry
+    - name: authenticate github nuget registry
       run: dotnet nuget add source --username jokk-itu --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/jokk-itu/index.json"
-      shell: bash
-      
-    - name: Push packages
+    - name: push packages to github nuget registry
       run: |
         cors_package=$(ls *nupkg)
         dotnet nuget push "$CORS/bin/$CONFIGURATION/$cors_package" --source "github" --skip-duplicate
-      shell: bash
