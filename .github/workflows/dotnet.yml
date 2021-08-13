@@ -38,6 +38,5 @@ jobs:
     - name: Push packages
       run: |
         cors_package=$(ls *nupkg)
-        dotnet nuget push "$cors_package" --source "github" --skip-duplicate
-      working-directory: $CORS/bin/$CONFIGURATION  
+        dotnet nuget push "$CORS/bin/$CONFIGURATION/$cors_package" --source "github" --skip-duplicate
       shell: bash
