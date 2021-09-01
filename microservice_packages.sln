@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jokk.Microservice.Swagger",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jokk.Microservice.Log", "Jokk.Microservice.Log\Jokk.Microservice.Log.csproj", "{0D6990F3-08FC-47F8-BE70-D603186BA941}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jokk.Microservice.Prometheus", "Jokk.Microservice.Prometheus\Jokk.Microservice.Prometheus.csproj", "{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +74,17 @@ Global
 		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Release|x64.Build.0 = Release|Any CPU
 		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Release|x86.ActiveCfg = Release|Any CPU
 		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Release|x86.Build.0 = Release|Any CPU
+		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Debug|x64.Build.0 = Debug|Any CPU
+		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Debug|x86.Build.0 = Debug|Any CPU
+		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Release|x64.ActiveCfg = Release|Any CPU
+		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Release|x64.Build.0 = Release|Any CPU
+		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Release|x86.ActiveCfg = Release|Any CPU
+		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
