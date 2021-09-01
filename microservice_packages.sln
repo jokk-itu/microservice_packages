@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jokk.Microservice.Polly", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jokk.Microservice.Swagger", "Jokk.Microservice.Swagger\Jokk.Microservice.Swagger.csproj", "{6A98457B-7015-4ADB-BAED-84A79A69ECC0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jokk.Microservice.Log", "Jokk.Microservice.Log\Jokk.Microservice.Log.csproj", "{0D6990F3-08FC-47F8-BE70-D603186BA941}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,5 +60,17 @@ Global
 		{6A98457B-7015-4ADB-BAED-84A79A69ECC0}.Release|x64.Build.0 = Release|Any CPU
 		{6A98457B-7015-4ADB-BAED-84A79A69ECC0}.Release|x86.ActiveCfg = Release|Any CPU
 		{6A98457B-7015-4ADB-BAED-84A79A69ECC0}.Release|x86.Build.0 = Release|Any CPU
+		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Debug|x64.Build.0 = Debug|Any CPU
+		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Debug|x86.Build.0 = Debug|Any CPU
+		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Release|x64.ActiveCfg = Release|Any CPU
+		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Release|x64.Build.0 = Release|Any CPU
+		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Release|x86.ActiveCfg = Release|Any CPU
+		{0D6990F3-08FC-47F8-BE70-D603186BA941}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
