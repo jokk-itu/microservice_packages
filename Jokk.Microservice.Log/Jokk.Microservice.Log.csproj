@@ -2,6 +2,13 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>Jokk.Microservice.Log</PackageId>
+        <Title>Log</Title>
+        <Authors>Joachim Kelsen</Authors>
+        <Company>Jokk</Company>
+        <PackageDescription>A package which sets up Logging for Startup and Program in ASP.NET Core</PackageDescription>
+        <RepositoryUrl>https://github.com/jokk-itu/microservice_packages</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
