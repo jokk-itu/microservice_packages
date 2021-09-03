@@ -1,4 +1,5 @@
 using System.Net.Http;
+using Jokk.Microservice.Prometheus.Constants;
 using Jokk.Microservice.Prometheus.HealthChecks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -9,13 +10,21 @@ namespace Jokk.Microservice.Prometheus
 {
     public static class StartupExtensions
     {
-        public static IServiceCollection AddPrometheus(this IServiceCollection services, string sqlserver = null, string mongodb = null, IConfigurationSection neo4J = null)
+        public static IServiceCollection AddPrometheus(this IServiceCollection services, string[] serviceUris, string sqlserver = null, string mongodb = null, IConfigurationSection neo4J = null)
         {
             AddNeo4J(services, neo4J);
             AddMongo(services, mongodb);
             AddSqlServer(services, sqlserver);
+            AddServiceHealthChecks(services, serviceUris);
             services.AddHealthChecks().ForwardToPrometheus();
             return services;
+        }
+
+        private static void AddServiceHealthChecks(IServiceCollection services, string[] serviceUris)
+        {
+            services.AddTransient(serviceProvider => 
+                new ServiceHealthCheck(serviceProvider.GetRequiredService<IHttpClientFactory>(), serviceUris));
+            services.AddHealthChecks().AddCheck<ServiceHealthCheck>("service_health_check");
         }
 
         private static void AddNeo4J(IServiceCollection services, IConfigurationSection neo4J)
@@ -45,7 +54,7 @@ namespace Jokk.Microservice.Prometheus
             app.UseHttpMetrics();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHealthChecks("/health"); //Add Authorization (Basic Auth?)
+                endpoints.MapHealthChecks(HealthCheckEndpoint.Endpoint); //Add Authorization (Basic Auth?)
                 endpoints.MapMetrics();
             });
             return app;
