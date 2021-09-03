@@ -37,7 +37,5 @@ namespace Jokk.Microservice.Cors
         {
             return app.UseCors(PolicyName);
         }
-        
-        
     }
 }
