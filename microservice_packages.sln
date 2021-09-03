@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jokk.Microservice.Log", "Jo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jokk.Microservice.Prometheus", "Jokk.Microservice.Prometheus\Jokk.Microservice.Prometheus.csproj", "{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jokk.Microservice.HealthChecks", "Jokk.Microservice.HealthChecks\Jokk.Microservice.HealthChecks.csproj", "{ECEC84B2-D767-4B27-A2B7-10BE6BAEF79F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,17 +86,5 @@ Global
 		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Release|x64.Build.0 = Release|Any CPU
 		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Release|x86.ActiveCfg = Release|Any CPU
 		{BE57D3D5-F5D1-4C68-AF4A-47CA4C189A69}.Release|x86.Build.0 = Release|Any CPU
-		{ECEC84B2-D767-4B27-A2B7-10BE6BAEF79F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ECEC84B2-D767-4B27-A2B7-10BE6BAEF79F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ECEC84B2-D767-4B27-A2B7-10BE6BAEF79F}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{ECEC84B2-D767-4B27-A2B7-10BE6BAEF79F}.Debug|x64.Build.0 = Debug|Any CPU
-		{ECEC84B2-D767-4B27-A2B7-10BE6BAEF79F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{ECEC84B2-D767-4B27-A2B7-10BE6BAEF79F}.Debug|x86.Build.0 = Debug|Any CPU
-		{ECEC84B2-D767-4B27-A2B7-10BE6BAEF79F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ECEC84B2-D767-4B27-A2B7-10BE6BAEF79F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ECEC84B2-D767-4B27-A2B7-10BE6BAEF79F}.Release|x64.ActiveCfg = Release|Any CPU
-		{ECEC84B2-D767-4B27-A2B7-10BE6BAEF79F}.Release|x64.Build.0 = Release|Any CPU
-		{ECEC84B2-D767-4B27-A2B7-10BE6BAEF79F}.Release|x86.ActiveCfg = Release|Any CPU
-		{ECEC84B2-D767-4B27-A2B7-10BE6BAEF79F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
