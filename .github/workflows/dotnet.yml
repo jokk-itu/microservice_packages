@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: 
-        projects: ['Jokk.Microservice.Cors', 'Jokk.Microservice.Polly', 'Jokk.Microservice.Swagger']
+        projects: ['Jokk.Microservice.Cors', 'Jokk.Microservice.Polly', 'Jokk.Microservice.Swagger', 'Jokk.Microservice.Log', 'Jokk.Microservice.Prometheus']
 
     steps:
     - uses: actions/checkout@v2
