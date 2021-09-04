@@ -45,7 +45,10 @@ namespace Jokk.Microservice.Swagger
 
         public static IApplicationBuilder UseMicroserviceSwagger(this IApplicationBuilder app)
         {
-            return app.UseSwagger();
+            return app
+                .UseSwagger()
+                .UseSwaggerUI(c => 
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api v1"));;
         }
     }
 }

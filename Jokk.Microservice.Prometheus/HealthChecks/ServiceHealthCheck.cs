@@ -5,16 +5,17 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Jokk.Microservice.Prometheus.Constants;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Jokk.Microservice.Prometheus.HealthChecks
 {
     public class ServiceHealthCheck : IHealthCheck
     {
-        private readonly string[] _uris;
+        private readonly IConfigurationSection _uris;
         private readonly HttpClient _httpClient;
         
-        public ServiceHealthCheck(IHttpClientFactory factory, string[] uris)
+        public ServiceHealthCheck(IHttpClientFactory factory, IConfigurationSection uris)
         {
             _uris = uris;
             _httpClient = factory.CreateClient();
@@ -22,15 +23,16 @@ namespace Jokk.Microservice.Prometheus.HealthChecks
         
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
         {
-            var unhealthyServices = new ReadOnlyDictionary<string,string>(new Dictionary<string, string>());
-            foreach (var uri in _uris)
+            var unhealthyServices = new Dictionary<string, object>();
+            foreach (var service in _uris.GetChildren())
             {
-                var response = await _httpClient.GetAsync($"{uri}{HealthCheckEndpoint.Endpoint}", cancellationToken);
+                var response = await _httpClient.GetAsync($"{service.Value}{HealthCheckEndpoint.Endpoint}", cancellationToken);
                 if (!response.IsSuccessStatusCode)
-                    unhealthyServices.TryAdd(uri, $"StatusCode: {response.StatusCode}, Reason: {response.ReasonPhrase}");
+                    unhealthyServices.TryAdd(service.Key, 
+                        $"Service: {service.Key}, Uri: {service.Value}, StatusCode: {response.StatusCode}, Reason: {response.ReasonPhrase}");
             }
 
-            return unhealthyServices.Any() ? HealthCheckResult.Unhealthy() : HealthCheckResult.Healthy();
+            return unhealthyServices.Any() ? HealthCheckResult.Unhealthy(data: new ReadOnlyDictionary<string, object>(unhealthyServices)) : HealthCheckResult.Healthy();
         }
     }
 }

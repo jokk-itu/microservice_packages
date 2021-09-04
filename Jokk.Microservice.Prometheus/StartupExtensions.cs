@@ -10,7 +10,7 @@ namespace Jokk.Microservice.Prometheus
 {
     public static class StartupExtensions
     {
-        public static IServiceCollection AddPrometheus(this IServiceCollection services, string[] serviceUris, string sqlserver = null, string mongodb = null, IConfigurationSection neo4J = null)
+        public static IServiceCollection AddPrometheus(this IServiceCollection services, IConfigurationSection serviceUris, string sqlserver = null, string mongodb = null, IConfigurationSection neo4J = null)
         {
             AddNeo4J(services, neo4J);
             AddMongo(services, mongodb);
@@ -20,7 +20,7 @@ namespace Jokk.Microservice.Prometheus
             return services;
         }
 
-        private static void AddServiceHealthChecks(IServiceCollection services, string[] serviceUris)
+        private static void AddServiceHealthChecks(IServiceCollection services, IConfigurationSection serviceUris)
         {
             services.AddTransient(serviceProvider => 
                 new ServiceHealthCheck(serviceProvider.GetRequiredService<IHttpClientFactory>(), serviceUris));

@@ -13,7 +13,7 @@ namespace Jokk.Microservice.Log.Extensions
 {
     public static class ProgramExtensions
     {
-        public static IHostBuilder AddLogging(this IHostBuilder host, string serviceName, ConfigurationSection logSection)
+        public static IHostBuilder AddLogging(this IHostBuilder host, string serviceName, IConfiguration logSection)
         {
             return host.UseSerilog((builderContext, services, logConfig) =>
             {
@@ -47,7 +47,7 @@ namespace Jokk.Microservice.Log.Extensions
             logConfig.Enrich.WithProperty("Environment", environment);
         }
 
-        private static void SetOverrideMinimumLevel(LoggerConfiguration logConfig, ConfigurationSection logSection)
+        private static void SetOverrideMinimumLevel(LoggerConfiguration logConfig, IConfiguration logSection)
         {
             var overrides = logSection.GetSection("Overrides").GetChildren();
             foreach (var section in overrides)
