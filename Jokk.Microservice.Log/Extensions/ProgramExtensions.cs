@@ -52,7 +52,8 @@ namespace Jokk.Microservice.Log.Extensions
             var overrides = logSection.GetSection("Overrides").GetChildren();
             foreach (var section in overrides)
             {
-                //Set Override for namespace and its' LogLevel
+                var logEventLevel = Enum.Parse<Serilog.Events.LogEventLevel>(section.Value);
+                logConfig.MinimumLevel.Override(section.Key, logEventLevel);
             }
         }
     }
