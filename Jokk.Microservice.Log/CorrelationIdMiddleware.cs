@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Jokk.Microservice.Log.Constants;
 using Microsoft.AspNetCore.Http;
@@ -23,8 +24,10 @@ namespace Jokk.Microservice.Log
         private void AddCorrelationId(HttpContext httpContext)
         {
             var correlationId = httpContext.Request.Headers[CorrelationId.Header];
-            if (correlationId.Count == 0)
+            if (!correlationId.Any())
                 httpContext.Request.Headers[CorrelationId.Header] = Guid.NewGuid().ToString();
+            
+            Console.WriteLine($"correlationId: {httpContext.Request.Headers[CorrelationId.Header]}");
         }
     }
 }

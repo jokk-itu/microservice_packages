@@ -10,7 +10,12 @@ namespace Jokk.Microservice.Prometheus
 {
     public static class StartupExtensions
     {
-        public static IServiceCollection AddPrometheus(this IServiceCollection services, IConfigurationSection serviceUris, string sqlserver = null, string mongodb = null, IConfigurationSection neo4J = null)
+        public static IServiceCollection AddPrometheus(
+            this IServiceCollection services, 
+            IConfigurationSection serviceUris, 
+            string sqlserver = null, 
+            string mongodb = null, 
+            IConfigurationSection neo4J = null)
         {
             AddNeo4J(services, neo4J);
             AddMongo(services, mongodb);
