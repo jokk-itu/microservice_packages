@@ -9,7 +9,7 @@ namespace Jokk.Microservice.Log.Extensions
 {
     public static class StartupExtensions
     {
-        public static IServiceCollection AddLogging(this IServiceCollection services)
+        public static IServiceCollection AddMicroserviceLogging(this IServiceCollection services)
         {
             services.ConfigureAll<HttpClientFactoryOptions>(options =>
             {
@@ -22,12 +22,17 @@ namespace Jokk.Microservice.Log.Extensions
                 });
             });
             return services;
-             
         }
 
-        public static IApplicationBuilder UseLogging(this IApplicationBuilder app)
+        public static IApplicationBuilder UseMicroserviceLogging(this IApplicationBuilder app)
         {
-            app.UseSerilogRequestLogging((options) => {});
+            app.UseSerilogRequestLogging((options) =>
+            {
+                options.EnrichDiagnosticContext = (diagnosticsContext, httpContext) =>
+                {
+                    
+                };
+            });
             app.UseMiddleware<CorrelationIdMiddleware>();
             return app;
         }

@@ -5,8 +5,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageId>Jokk.Microservice.Log</PackageId>
         <AssemblyName>Jokk.Microservice.Log</AssemblyName>
-        <VersionPrefix>dev-</VersionPrefix>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <Title>Log</Title>
         <Authors>Joachim Kelsen</Authors>
         <Company>Jokk</Company>

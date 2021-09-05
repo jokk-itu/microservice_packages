@@ -6,18 +6,15 @@ namespace Jokk.Microservice.Swagger
 {
     public static class Setup
     {
-        public static IServiceCollection AddSwaggerAnonymous(this IServiceCollection services)
-        {
-            return services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo()
+        public static IServiceCollection AddSwaggerAnonymous(this IServiceCollection services) => 
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo()
             {
                 Title = "WebApi",
                 Version = "v1"
             }));
-        }
-        
-        public static IServiceCollection AddSwaggerAuthorization(this IServiceCollection services)
-        {
-            return services.AddSwaggerGen(c =>
+
+        public static IServiceCollection AddSwaggerAuthorization(this IServiceCollection services) =>
+            services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "WebApi", Version = "v1"});
                 var securitySchema = new OpenApiSecurityScheme
@@ -41,14 +38,10 @@ namespace Jokk.Microservice.Swagger
                 };
                 c.AddSecurityRequirement(securityRequirement);
             });
-        }
 
-        public static IApplicationBuilder UseMicroserviceSwagger(this IApplicationBuilder app)
-        {
-            return app
-                .UseSwagger()
-                .UseSwaggerUI(c => 
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api v1"));;
-        }
+        public static IApplicationBuilder UseMicroserviceSwagger(this IApplicationBuilder app) =>
+            app.UseSwagger()
+               .UseSwaggerUI(c => 
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api v1"));
     }
 }

@@ -10,7 +10,7 @@ namespace Jokk.Microservice.Prometheus
 {
     public static class StartupExtensions
     {
-        public static IServiceCollection AddPrometheus(
+        public static IServiceCollection AddMicroservicePrometheus(
             this IServiceCollection services, 
             IConfigurationSection serviceUris, 
             string sqlserver = null, 
@@ -54,12 +54,13 @@ namespace Jokk.Microservice.Prometheus
                 services.AddHealthChecks().AddSqlServer(sqlserver);
         }
 
-        public static IApplicationBuilder UsePrometheus(this IApplicationBuilder app)
+        public static IApplicationBuilder UseMicroservicePrometheus(this IApplicationBuilder app)
         {
             app.UseHttpMetrics();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHealthChecks(HealthCheckEndpoint.Endpoint); //Add Authorization (Basic Auth?)
+                //Add Authorization (Basic Auth?)
+                endpoints.MapHealthChecks(HealthCheckEndpoint.Endpoint);
                 endpoints.MapMetrics();
             });
             return app;

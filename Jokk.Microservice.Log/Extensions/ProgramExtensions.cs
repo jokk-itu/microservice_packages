@@ -2,7 +2,9 @@ using System;
 using System.Text.Json;
 using Jokk.Microservice.Log.Enrichers;
 using Jokk.Microservice.Log.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog.Sinks.Seq;
 using Serilog;
@@ -13,7 +15,7 @@ namespace Jokk.Microservice.Log.Extensions
 {
     public static class ProgramExtensions
     {
-        public static IHostBuilder AddLogging(this IHostBuilder host, string serviceName, IConfiguration logSection)
+        public static IHostBuilder AddMicroserviceLogging(this IHostBuilder host, string serviceName, IConfiguration logSection)
         {
             return host.UseSerilog((builderContext, services, logConfig) =>
             {

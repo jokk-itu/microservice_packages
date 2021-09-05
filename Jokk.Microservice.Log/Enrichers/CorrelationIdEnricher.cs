@@ -10,7 +10,7 @@ namespace Jokk.Microservice.Log.Enrichers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private const string Event = "CorrelationId";
-
+        
         public CorrelationIdEnricher() : this(new HttpContextAccessor()) {}
 
         private CorrelationIdEnricher(IHttpContextAccessor httpContextAccessor)

@@ -7,7 +7,7 @@ namespace Jokk.Microservice.Polly
 {
     public static class Setup
     {
-        public static IHttpClientBuilder AddPolicies(this IHttpClientBuilder client)
+        public static IHttpClientBuilder AddMicroservicePolicies(this IHttpClientBuilder client)
         {
             var retryPolicy = HttpPolicyExtensions.HandleTransientHttpError().WaitAndRetryAsync(3,
                 retryAttempt => TimeSpan.FromSeconds(retryAttempt * 2));

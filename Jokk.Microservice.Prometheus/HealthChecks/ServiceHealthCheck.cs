@@ -31,8 +31,12 @@ namespace Jokk.Microservice.Prometheus.HealthChecks
                     unhealthyServices.TryAdd(service.Key, 
                         $"Service: {service.Key}, Uri: {service.Value}, StatusCode: {response.StatusCode}, Reason: {response.ReasonPhrase}");
             }
-
-            return unhealthyServices.Any() ? HealthCheckResult.Unhealthy(data: new ReadOnlyDictionary<string, object>(unhealthyServices)) : HealthCheckResult.Healthy();
+            var description = unhealthyServices.Any()
+                ? unhealthyServices.Select(pair => $"{pair.Value}\n").ToString()
+                : "All services are healthy";
+            return unhealthyServices.Any() 
+                ? HealthCheckResult.Unhealthy(description, data: new ReadOnlyDictionary<string, object>(unhealthyServices)) 
+                : HealthCheckResult.Healthy();
         }
     }
 }
