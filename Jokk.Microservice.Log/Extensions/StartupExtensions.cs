@@ -11,6 +11,7 @@ namespace Jokk.Microservice.Log.Extensions
     {
         public static IServiceCollection AddMicroserviceLogging(this IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
             services.ConfigureAll<HttpClientFactoryOptions>(options =>
             {
                 options.HttpMessageHandlerBuilderActions.Add(builder =>
