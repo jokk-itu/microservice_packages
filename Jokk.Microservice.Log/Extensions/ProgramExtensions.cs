@@ -15,8 +15,16 @@ namespace Jokk.Microservice.Log.Extensions
 {
     public static class ProgramExtensions
     {
-        public static IHostBuilder AddMicroserviceLogging(this IHostBuilder host, string serviceName, IConfiguration logSection)
+        public static IHostBuilder AddMicroserviceLogging(this IHostBuilder host, string serviceName)
         {
+            var logSection = new ConfigurationBuilder()
+                .SetBasePath(Environment.CurrentDirectory)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
+                .AddEnvironmentVariables()
+                .Build()
+                .GetSection("Logging");
+            
             return host.UseSerilog((builderContext, services, logConfig) =>
             {
                 ConfigureEnvironment(logConfig);
