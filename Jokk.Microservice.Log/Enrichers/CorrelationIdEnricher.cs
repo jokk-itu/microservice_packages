@@ -22,7 +22,6 @@ namespace Jokk.Microservice.Log.Enrichers
         {
             var httpContext = _httpContextAccessor.HttpContext;
             var correlationId = httpContext?.Request.Headers[CorrelationId.Header].ToString();
-            Console.WriteLine($"HttpContext is null: {httpContext == null}, correlationId: {correlationId}");
             var property = propertyFactory.CreateProperty(Event, correlationId);
             logEvent.AddPropertyIfAbsent(property);
         }

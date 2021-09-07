@@ -26,8 +26,6 @@ namespace Jokk.Microservice.Log
             var correlationId = httpContext.Request.Headers[CorrelationId.Header];
             if (!correlationId.Any())
                 httpContext.Request.Headers[CorrelationId.Header] = Guid.NewGuid().ToString();
-            
-            Console.WriteLine($"correlationId: {httpContext.Request.Headers[CorrelationId.Header]}");
         }
     }
 }
