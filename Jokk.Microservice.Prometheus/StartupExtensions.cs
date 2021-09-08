@@ -34,6 +34,7 @@ namespace Jokk.Microservice.Prometheus
 
         private static void AddServiceHealthChecks(IServiceCollection services, IConfigurationSection serviceUris)
         {
+            services.AddHttpClient(ClientName.HealthCheck);
             services.AddTransient(serviceProvider => 
                 new ServiceHealthCheck(serviceProvider.GetRequiredService<IHttpClientFactory>(), serviceUris));
             services.AddHealthChecks().AddCheck<ServiceHealthCheck>("service_health_check");

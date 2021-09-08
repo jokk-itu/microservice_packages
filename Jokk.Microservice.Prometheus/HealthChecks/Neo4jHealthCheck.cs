@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Jokk.Microservice.Prometheus.Constants;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -18,7 +19,7 @@ namespace Jokk.Microservice.Prometheus.HealthChecks
         
         public Neo4JHealthCheck(IConfigurationSection configuration, IHttpClientFactory factory)
         {
-            _httpClient = factory.CreateClient();
+            _httpClient = factory.CreateClient(ClientName.HealthCheck);
             _configuration = configuration;
             
             _databaseAvailable = $"/db/{_configuration["Database"]}/cluster/available";

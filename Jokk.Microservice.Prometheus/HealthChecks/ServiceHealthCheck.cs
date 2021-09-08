@@ -18,7 +18,7 @@ namespace Jokk.Microservice.Prometheus.HealthChecks
         public ServiceHealthCheck(IHttpClientFactory factory, IConfigurationSection uris)
         {
             _uris = uris;
-            _httpClient = factory.CreateClient();
+            _httpClient = factory.CreateClient(ClientName.HealthCheck);
         }
         
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
@@ -28,13 +28,13 @@ namespace Jokk.Microservice.Prometheus.HealthChecks
             {
                 var response = await _httpClient.GetAsync($"{service.Value}{HealthCheckEndpoint.Endpoint}", cancellationToken);
                 if (!response.IsSuccessStatusCode)
-                    unhealthyServices.TryAdd(service.Key, 
+                    unhealthyServices.TryAdd(service.Key,
                         $"Service: {service.Key}, Uri: {service.Value}, StatusCode: {response.StatusCode}, Reason: {response.ReasonPhrase}");
             }
             var description = unhealthyServices.Any()
                 ? unhealthyServices.Select(pair => $"{pair.Value}\n").ToString()
                 : "All services are healthy";
-            return unhealthyServices.Any() 
+            return unhealthyServices.Any()
                 ? HealthCheckResult.Unhealthy(description, data: new ReadOnlyDictionary<string, object>(unhealthyServices)) 
                 : HealthCheckResult.Healthy();
         }
