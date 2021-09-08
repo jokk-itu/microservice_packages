@@ -22,7 +22,10 @@ namespace Jokk.Microservice.Log
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var httpContext = _httpContextAccessor.HttpContext;
-            request.Headers.Add(CorrelationId.Header, httpContext!.Request.Headers[CorrelationId.Header].ToString());
+            if(httpContext is null)
+                return await base.SendAsync(request, cancellationToken);
+            
+            request.Headers.Add(CorrelationId.Header, httpContext.Request.Headers[CorrelationId.Header].ToString());
             
             var watch = Stopwatch.StartNew();
             var response = await base.SendAsync(request, cancellationToken);
