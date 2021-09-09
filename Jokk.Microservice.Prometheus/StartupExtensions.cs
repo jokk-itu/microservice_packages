@@ -61,7 +61,7 @@ namespace Jokk.Microservice.Prometheus
             foreach (var (service, uri) in configuration.Services)
             {
                 services.AddTransient(serviceProvider => 
-                    new ServiceHealthCheck(serviceProvider.GetRequiredService<IHttpClientFactory>(), uri, service));
+                    new ServiceHealthCheck(serviceProvider.GetRequiredService<IHttpClientFactory>(), service, uri));
                 services.AddHealthChecks().AddCheck<ServiceHealthCheck>(service);
             }
         }
