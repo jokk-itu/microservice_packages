@@ -14,24 +14,14 @@ namespace Jokk.Microservice.Log.Extensions
     {
         public static IHostBuilder AddMicroserviceLogging(this IHostBuilder host, string serviceName)
         {
-            var appSettings = new ConfigurationBuilder()
-                .SetBasePath(Environment.CurrentDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
-                    optional: true)
-                .AddEnvironmentVariables()
-                .Build();
-
-            var configuration = new LogConfiguration();
-            appSettings.Bind("Logging", configuration);
-            
-            
-            return host.UseSerilog((builderContext, services, logConfig) =>
+            return host.UseSerilog((builderContext, services, loggerConfig) =>
             {
-                ConfigureEnvironment(logConfig);
-                SetOverrideMinimumLevel(logConfig, configuration);
-                logConfig
-                    .WriteTo.Seq(builderContext.Configuration["Logging:SeqUri"])
+                var logConfig = GetLogConfiguration(builderContext.Configuration);
+                ValidateConfig(logConfig);
+                ConfigureEnvironment(loggerConfig);
+                SetOverrideMinimumLevel(loggerConfig, logConfig);
+                SetSinks(loggerConfig, logConfig);
+                loggerConfig
                     .Enrich.FromLogContext()
                     .Enrich.WithProcessId()
                     .Enrich.WithProcessName()
@@ -42,6 +32,14 @@ namespace Jokk.Microservice.Log.Extensions
                     .Enrich.With<CorrelationIdEnricher>()
                     .Enrich.WithProperty("Service", serviceName);
             });
+        }
+
+        private static LogConfiguration GetLogConfiguration(IConfiguration appSettings)
+        {
+            var configuration = new LogConfiguration();
+            appSettings.Bind("Logging", configuration);
+
+            return configuration;
         }
 
         private static void ConfigureEnvironment(LoggerConfiguration logConfig)
@@ -58,13 +56,27 @@ namespace Jokk.Microservice.Log.Extensions
             logConfig.Enrich.WithProperty("Environment", environment);
         }
 
-        private static void SetOverrideMinimumLevel(LoggerConfiguration loggerConfig, LogConfiguration logConfiguration)
+        private static void SetOverrideMinimumLevel(LoggerConfiguration loggerConfig, LogConfiguration logConfig)
         {
-            foreach (var (name, url) in logConfiguration.Overrides)
+            foreach (var (name, url) in logConfig.Overrides)
             {
                 var logEventLevel = Enum.Parse<LogEventLevel>(url);
                 loggerConfig.MinimumLevel.Override(name, logEventLevel);
             }
+        }
+
+        private static void SetSinks(LoggerConfiguration loggerConfig, LogConfiguration logConfig)
+        {
+            if (logConfig.LogToSeq)
+            {
+                loggerConfig.WriteTo.Seq(logConfig.SeqUrl);
+            }
+        }
+
+        private static void ValidateConfig(LogConfiguration logConfig)
+        {
+            if (logConfig.LogToSeq && !Uri.IsWellFormedUriString(logConfig.SeqUrl, UriKind.Absolute))
+                throw new ArgumentException($"{logConfig.SeqUrl} is ill formatted");
         }
     }
 }

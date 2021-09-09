@@ -15,18 +15,22 @@ namespace Jokk.Microservice.Prometheus
             this IServiceCollection services,
             PrometheusConfiguration configuration)
         {
-            ValidateConfiguration(configuration);
+            ValidateServices(configuration);
+            ValidateMongo(configuration);
+            ValidateNeo4J(configuration);
+            
             AddNeo4J(services, configuration);
             AddMongo(services, configuration);
             AddSqlServer(services, configuration);
             AddServiceHealthChecks(services, configuration);
+            
             services.AddHealthChecks().ForwardToPrometheus();
             services.AddHttpClient(ClientName.HealthCheck).UseHttpClientMetrics();
             services.AddSystemMetrics();
             return services;
         }
 
-        private static void ValidateConfiguration(PrometheusConfiguration configuration)
+        private static void ValidateServices(PrometheusConfiguration configuration)
         {
             foreach (var (service, uri) in configuration.Services)
             {
@@ -36,6 +40,20 @@ namespace Jokk.Microservice.Prometheus
                 if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute))
                     throw new UriFormatException($"{uri} for {service} is not a correct Uri");
             }
+        }
+
+        private static void ValidateNeo4J(PrometheusConfiguration configuration)
+        {
+            if (!string.IsNullOrEmpty(configuration.Neo4JConnectionString)
+                && !Uri.IsWellFormedUriString(configuration.Neo4JConnectionString, UriKind.Absolute))
+                throw new ArgumentException($"{configuration.Neo4JConnectionString} is ill formed");
+        }
+
+        private static void ValidateMongo(PrometheusConfiguration configuration)
+        {
+            if (!string.IsNullOrEmpty(configuration.MongoConnectionString)
+                && !Uri.IsWellFormedUriString(configuration.Neo4JConnectionString, UriKind.Absolute))
+                throw new ArgumentException($"{configuration.MongoConnectionString} is ill formed");
         }
 
         private static void AddServiceHealthChecks(IServiceCollection services, PrometheusConfiguration configuration)
@@ -55,7 +73,7 @@ namespace Jokk.Microservice.Prometheus
             
             services.AddTransient(serviceProvider => 
                 new Neo4JHealthCheck(configuration, serviceProvider.GetRequiredService<IHttpClientFactory>()));
-            services.AddHealthChecks().AddCheck<Neo4JHealthCheck>("graph_health_check");
+            services.AddHealthChecks().AddCheck<Neo4JHealthCheck>(HealthCheckName.Neo4J);
         }
 
         private static void AddMongo(IServiceCollection services, PrometheusConfiguration configuration)
