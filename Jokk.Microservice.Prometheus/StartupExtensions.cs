@@ -44,16 +44,16 @@ namespace Jokk.Microservice.Prometheus
 
         private static void ValidateNeo4J(PrometheusConfiguration configuration)
         {
-            if (!string.IsNullOrEmpty(configuration.Neo4JConnectionString)
-                && !Uri.IsWellFormedUriString(configuration.Neo4JConnectionString, UriKind.Absolute))
-                throw new ArgumentException($"{configuration.Neo4JConnectionString} is ill formed");
+            if (!string.IsNullOrEmpty(configuration.Neo4JUri)
+                && !Uri.IsWellFormedUriString(configuration.Neo4JUri, UriKind.Absolute))
+                throw new ArgumentException($"{configuration.Neo4JUri} is ill formed");
         }
 
         private static void ValidateMongo(PrometheusConfiguration configuration)
         {
-            if (!string.IsNullOrEmpty(configuration.MongoConnectionString)
-                && !Uri.IsWellFormedUriString(configuration.Neo4JConnectionString, UriKind.Absolute))
-                throw new ArgumentException($"{configuration.MongoConnectionString} is ill formed");
+            if (!string.IsNullOrEmpty(configuration.MongoUri)
+                && !Uri.IsWellFormedUriString(configuration.MongoUri, UriKind.Absolute))
+                throw new ArgumentException($"{configuration.MongoUri} is ill formed");
         }
 
         private static void AddServiceHealthChecks(IServiceCollection services, PrometheusConfiguration configuration)
@@ -68,7 +68,7 @@ namespace Jokk.Microservice.Prometheus
 
         private static void AddNeo4J(IServiceCollection services, PrometheusConfiguration configuration)
         {
-            if (string.IsNullOrEmpty(configuration.Neo4JConnectionString)) 
+            if (string.IsNullOrEmpty(configuration.Neo4JUri)) 
                 return;
             
             services.AddTransient(serviceProvider => 
@@ -78,8 +78,12 @@ namespace Jokk.Microservice.Prometheus
 
         private static void AddMongo(IServiceCollection services, PrometheusConfiguration configuration)
         {
-            if (!string.IsNullOrEmpty(configuration.MongoConnectionString))
-                services.AddHealthChecks().AddMongoDb(configuration.MongoConnectionString);
+            if (!string.IsNullOrEmpty(configuration.MongoUri))
+            {
+                var connectionString = configuration.MongoUri.Split("://");
+                connectionString.SetValue($"{configuration.MongoUsername}:{configuration.MongoPassword}@", 1);
+                services.AddHealthChecks().AddMongoDb(connectionString.ToString());
+            }
         }
         
         private static void AddSqlServer(IServiceCollection services, PrometheusConfiguration configuration)

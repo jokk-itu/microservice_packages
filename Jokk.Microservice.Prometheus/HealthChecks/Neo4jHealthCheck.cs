@@ -55,7 +55,7 @@ namespace Jokk.Microservice.Prometheus.HealthChecks
 
         private void SetupClient()
         {
-            _httpClient.BaseAddress = new Uri(_configuration.Neo4JConnectionString);
+            _httpClient.BaseAddress = new Uri(_configuration.Neo4JUri);
         }
     }
 }

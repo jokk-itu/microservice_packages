@@ -8,7 +8,7 @@ namespace Jokk.Microservice.Prometheus
 
         #region Mongo
 
-        public string MongoConnectionString { get; set; }
+        public string MongoUri { get; set; }
 
         public string MongoDatabase { get; set; }
 
@@ -20,7 +20,7 @@ namespace Jokk.Microservice.Prometheus
 
         #region Neo4J
 
-        public string Neo4JConnectionString { get; set; }
+        public string Neo4JUri { get; set; }
 
         public string Neo4JDatabase { get; set; }
 
