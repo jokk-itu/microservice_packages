@@ -23,6 +23,7 @@
       <PackageReference Include="Serilog.Exceptions" Version="7.0.0" />
       <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
       <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.1" />
+      <PackageReference Include="Serilog.Sinks.Udp" Version="7.1.0" />
     </ItemGroup>
 
 </Project>

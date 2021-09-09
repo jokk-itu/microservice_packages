@@ -1,4 +1,5 @@
 using System;
+using System.Net.Sockets;
 using Jokk.Microservice.Log.Enrichers;
 using Jokk.Microservice.Log.Exceptions;
 using Microsoft.Extensions.Configuration;
@@ -68,9 +69,11 @@ namespace Jokk.Microservice.Log.Extensions
         private static void SetSinks(LoggerConfiguration loggerConfig, LogConfiguration logConfig)
         {
             if (logConfig.LogToSeq)
-            {
                 loggerConfig.WriteTo.Seq(logConfig.SeqUrl);
-            }
+            if (logConfig.LogToConsole)
+                loggerConfig.WriteTo.Console();
+            if (logConfig.LogToUdp)
+                loggerConfig.WriteTo.Udp(logConfig.UdpHost, logConfig.UdpPort, AddressFamily.InterNetwork);
         }
 
         private static void ValidateConfig(LogConfiguration logConfig)
