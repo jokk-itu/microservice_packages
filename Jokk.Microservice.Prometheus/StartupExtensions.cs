@@ -40,9 +40,12 @@ namespace Jokk.Microservice.Prometheus
 
         private static void AddServiceHealthChecks(IServiceCollection services, PrometheusConfiguration configuration)
         {
-            services.AddTransient(serviceProvider => 
-                new ServiceHealthCheck(serviceProvider.GetRequiredService<IHttpClientFactory>(), configuration));
-            services.AddHealthChecks().AddCheck<ServiceHealthCheck>("service_health_check");
+            foreach (var (service, uri) in configuration.Services)
+            {
+                services.AddTransient(serviceProvider => 
+                    new ServiceHealthCheck(serviceProvider.GetRequiredService<IHttpClientFactory>(), uri, service));
+                services.AddHealthChecks().AddCheck<ServiceHealthCheck>(service);
+            }
         }
 
         private static void AddNeo4J(IServiceCollection services, PrometheusConfiguration configuration)
