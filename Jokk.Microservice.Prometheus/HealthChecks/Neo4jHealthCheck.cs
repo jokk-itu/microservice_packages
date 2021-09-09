@@ -3,27 +3,26 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Jokk.Microservice.Prometheus.Constants;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Jokk.Microservice.Prometheus.HealthChecks
 {
     internal class Neo4JHealthCheck : IHealthCheck
     {
-        private readonly IConfigurationSection _configuration;
+        private readonly PrometheusConfiguration _configuration;
         private readonly HttpClient _httpClient;
 
         private readonly string _cluster;
         private readonly string _databaseAvailable;
         private readonly string _databaseHealthy;
         
-        public Neo4JHealthCheck(IConfigurationSection configuration, IHttpClientFactory factory)
+        public Neo4JHealthCheck(PrometheusConfiguration configuration, IHttpClientFactory factory)
         {
             _httpClient = factory.CreateClient(ClientName.HealthCheck);
             _configuration = configuration;
             
-            _databaseAvailable = $"/db/{_configuration["Database"]}/cluster/available";
-            _databaseHealthy = $"/db/{_configuration["Database"]}/cluster/status";
+            _databaseAvailable = $"/db/{_configuration.Neo4JDatabase}/cluster/available";
+            _databaseHealthy = $"/db/{_configuration.Neo4JDatabase}/cluster/status";
             _cluster = "/dbms/cluster/status";
             
             SetupClient();
@@ -56,7 +55,7 @@ namespace Jokk.Microservice.Prometheus.HealthChecks
 
         private void SetupClient()
         {
-            _httpClient.BaseAddress = new Uri(_configuration["Uri"]);
+            _httpClient.BaseAddress = new Uri(_configuration.Neo4JConnectionString);
         }
     }
 }

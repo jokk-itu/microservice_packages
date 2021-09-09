@@ -1,13 +1,9 @@
+using System;
 using System.Net.Http;
 using Jokk.Microservice.Prometheus.Constants;
 using Jokk.Microservice.Prometheus.HealthChecks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Prometheus;
 using Prometheus.SystemMetrics;
 
@@ -16,50 +12,59 @@ namespace Jokk.Microservice.Prometheus
     public static class StartupExtensions
     {
         public static IServiceCollection AddMicroservicePrometheus(
-            this IServiceCollection services, 
-            IConfigurationSection serviceUris, 
-            string sqlserver = null, 
-            string mongodb = null, 
-            IConfigurationSection neo4J = null)
+            this IServiceCollection services,
+            PrometheusConfiguration configuration)
         {
-            AddNeo4J(services, neo4J);
-            AddMongo(services, mongodb);
-            AddSqlServer(services, sqlserver);
-            AddServiceHealthChecks(services, serviceUris);
+            ValidateConfiguration(configuration);
+            AddNeo4J(services, configuration);
+            AddMongo(services, configuration);
+            AddSqlServer(services, configuration);
+            AddServiceHealthChecks(services, configuration);
             services.AddHealthChecks().ForwardToPrometheus();
-            services.AddHttpClient(Options.DefaultName).UseHttpClientMetrics();
+            services.AddHttpClient(ClientName.HealthCheck).UseHttpClientMetrics();
             services.AddSystemMetrics();
             return services;
         }
 
-        private static void AddServiceHealthChecks(IServiceCollection services, IConfigurationSection serviceUris)
+        private static void ValidateConfiguration(PrometheusConfiguration configuration)
         {
-            services.AddHttpClient(ClientName.HealthCheck);
-            services.AddTransient(serviceProvider => 
-                new ServiceHealthCheck(serviceProvider.GetRequiredService<IHttpClientFactory>(), serviceUris));
-            services.AddHealthChecks().AddCheck<ServiceHealthCheck>("service_health_check");
-        }
-
-        private static void AddNeo4J(IServiceCollection services, IConfigurationSection neo4J)
-        {
-            if (neo4J != null)
+            foreach (var (service, uri) in configuration.Services)
             {
-                services.AddTransient(serviceProvider => 
-                    new Neo4JHealthCheck(neo4J, serviceProvider.GetRequiredService<IHttpClientFactory>()));
-                services.AddHealthChecks().AddCheck<Neo4JHealthCheck>("graph_health_check");
+                if (string.IsNullOrEmpty(service))
+                    throw new ArgumentException($"{nameof(service)} has to be specified");
+                
+                if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute))
+                    throw new UriFormatException($"{uri} for {service} is not a correct Uri");
             }
         }
 
-        private static void AddMongo(IServiceCollection services, string mongodb)
+        private static void AddServiceHealthChecks(IServiceCollection services, PrometheusConfiguration configuration)
         {
-            if (mongodb != null)
-                services.AddHealthChecks().AddMongoDb(mongodb);
+            services.AddTransient(serviceProvider => 
+                new ServiceHealthCheck(serviceProvider.GetRequiredService<IHttpClientFactory>(), configuration));
+            services.AddHealthChecks().AddCheck<ServiceHealthCheck>("service_health_check");
         }
 
-        private static void AddSqlServer(IServiceCollection services, string sqlserver)
+        private static void AddNeo4J(IServiceCollection services, PrometheusConfiguration configuration)
         {
-            if (sqlserver != null)
-                services.AddHealthChecks().AddSqlServer(sqlserver);
+            if (string.IsNullOrEmpty(configuration.Neo4JConnectionString)) 
+                return;
+            
+            services.AddTransient(serviceProvider => 
+                new Neo4JHealthCheck(configuration, serviceProvider.GetRequiredService<IHttpClientFactory>()));
+            services.AddHealthChecks().AddCheck<Neo4JHealthCheck>("graph_health_check");
+        }
+
+        private static void AddMongo(IServiceCollection services, PrometheusConfiguration configuration)
+        {
+            if (!string.IsNullOrEmpty(configuration.MongoConnectionString))
+                services.AddHealthChecks().AddMongoDb(configuration.MongoConnectionString);
+        }
+        
+        private static void AddSqlServer(IServiceCollection services, PrometheusConfiguration configuration)
+        {
+            if (!string.IsNullOrEmpty(configuration.SqlServerConnectionString))
+                services.AddHealthChecks().AddSqlServer(configuration.SqlServerConnectionString);
         }
 
         /// <summary>
@@ -72,7 +77,6 @@ namespace Jokk.Microservice.Prometheus
             app.UseHttpMetrics();
             app.UseEndpoints(endpoints =>
             {
-                //Add Authorization (Basic Auth?)
                 endpoints.MapHealthChecks(HealthCheckEndpoint.Endpoint);
                 endpoints.MapMetrics();
             });

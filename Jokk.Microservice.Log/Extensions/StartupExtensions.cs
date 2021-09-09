@@ -30,9 +30,7 @@ namespace Jokk.Microservice.Log.Extensions
             app.UseSerilogRequestLogging((options) =>
             {
                 options.EnrichDiagnosticContext = (diagnosticsContext, httpContext) =>
-                {
-                    
-                };
+                {};
             });
             app.UseMiddleware<CorrelationIdMiddleware>();
             return app;

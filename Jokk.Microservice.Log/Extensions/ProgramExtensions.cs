@@ -14,19 +14,22 @@ namespace Jokk.Microservice.Log.Extensions
     {
         public static IHostBuilder AddMicroserviceLogging(this IHostBuilder host, string serviceName)
         {
-            var logSection = new ConfigurationBuilder()
+            var appSettings = new ConfigurationBuilder()
                 .SetBasePath(Environment.CurrentDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
                     optional: true)
                 .AddEnvironmentVariables()
-                .Build()
-                .GetSection("Logging");
+                .Build();
 
+            var configuration = new LogConfiguration();
+            appSettings.Bind("Logging", configuration);
+            
+            
             return host.UseSerilog((builderContext, services, logConfig) =>
             {
                 ConfigureEnvironment(logConfig);
-                SetOverrideMinimumLevel(logConfig, logSection);
+                SetOverrideMinimumLevel(logConfig, configuration);
                 logConfig
                     .WriteTo.Seq(builderContext.Configuration["Logging:SeqUri"])
                     .Enrich.FromLogContext()
@@ -55,13 +58,12 @@ namespace Jokk.Microservice.Log.Extensions
             logConfig.Enrich.WithProperty("Environment", environment);
         }
 
-        private static void SetOverrideMinimumLevel(LoggerConfiguration logConfig, IConfiguration logSection)
+        private static void SetOverrideMinimumLevel(LoggerConfiguration loggerConfig, LogConfiguration logConfiguration)
         {
-            var overrides = logSection.GetSection("Overrides").GetChildren();
-            foreach (var section in overrides)
+            foreach (var (name, url) in logConfiguration.Overrides)
             {
-                var logEventLevel = Enum.Parse<LogEventLevel>(section.Value);
-                logConfig.MinimumLevel.Override(section.Key, logEventLevel);
+                var logEventLevel = Enum.Parse<LogEventLevel>(url);
+                loggerConfig.MinimumLevel.Override(name, logEventLevel);
             }
         }
     }
