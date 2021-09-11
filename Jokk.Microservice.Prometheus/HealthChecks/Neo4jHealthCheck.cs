@@ -4,58 +4,44 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jokk.Microservice.Prometheus.Constants;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Neo4j.Driver;
 
 namespace Jokk.Microservice.Prometheus.HealthChecks
 {
     internal class Neo4JHealthCheck : IHealthCheck
     {
         private readonly PrometheusConfiguration _configuration;
-        private readonly HttpClient _httpClient;
+        private readonly IDriver _driver;
 
-        private readonly string _cluster;
-        private readonly string _databaseAvailable;
-        private readonly string _databaseHealthy;
-        
-        public Neo4JHealthCheck(PrometheusConfiguration configuration, IHttpClientFactory factory)
+        public Neo4JHealthCheck(PrometheusConfiguration configuration, IHttpClientFactory factory, IDriver driver)
         {
-            _httpClient = factory.CreateClient(ClientName.HealthCheck);
             _configuration = configuration;
-            
-            _databaseAvailable = $"/db/{_configuration.Neo4JDatabase}/cluster/available";
-            _databaseHealthy = $"/db/{_configuration.Neo4JDatabase}/cluster/status";
-            _cluster = "/dbms/cluster/status";
-            
-            SetupClient();
-        }
-        
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
-            =>
-                await IsClusterHealthy() && 
-                await IsDatabaseAvailable() && 
-                await IsDatabaseHealthy() ? 
-                    HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy();
-        
-        private async Task<bool> IsClusterHealthy()
-        {
-            var response = await _httpClient.GetAsync(_cluster);
-            return response.IsSuccessStatusCode;
+            _driver = driver;
+
+            //_databaseAvailable = $"/db/{_configuration.Neo4JDatabase}/cluster/available";
+            //_databaseHealthy = $"/db/{_configuration.Neo4JDatabase}/cluster/status";
+            //_cluster = "/dbms/cluster/status";
         }
 
-        private async Task<bool> IsDatabaseAvailable()
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+            CancellationToken cancellationToken = new CancellationToken())
         {
-            var response = await _httpClient.GetAsync(_databaseAvailable);
-            return response.IsSuccessStatusCode;
-        }
-
-        private async Task<bool> IsDatabaseHealthy()
-        {
-            var response = await _httpClient.GetAsync(_databaseHealthy);
-            return response.IsSuccessStatusCode;
-        }
-
-        private void SetupClient()
-        {
-            _httpClient.BaseAddress = new Uri(_configuration.Neo4JUri);
+            try
+            {
+                var session = _driver.AsyncSession();
+                var response = await session.ReadTransactionAsync(async transaction =>
+                {
+                    const string cypher =
+                        @"MATCH (n) RETURN count(*) as count";
+                    var result = await transaction.RunAsync(cypher);
+                    return await result.PeekAsync();
+                });
+                return response is not null ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy();
+            }
+            catch (Neo4jException exception)
+            {
+                return HealthCheckResult.Unhealthy();
+            }
         }
     }
 }
