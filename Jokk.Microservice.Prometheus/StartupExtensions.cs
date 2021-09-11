@@ -73,8 +73,7 @@ namespace Jokk.Microservice.Prometheus
                 return;
 
             services.AddTransient(serviceProvider =>
-                new Neo4JHealthCheck(configuration, serviceProvider.GetRequiredService<IHttpClientFactory>(),
-                    serviceProvider.GetRequiredService<IDriver>()));
+                new Neo4JHealthCheck(configuration, serviceProvider.GetRequiredService<IDriver>()));
             services.AddHealthChecks().AddCheck<Neo4JHealthCheck>(HealthCheckName.Neo4J);
         }
 

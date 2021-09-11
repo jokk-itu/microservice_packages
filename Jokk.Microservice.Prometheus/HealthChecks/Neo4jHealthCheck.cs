@@ -13,14 +13,10 @@ namespace Jokk.Microservice.Prometheus.HealthChecks
         private readonly PrometheusConfiguration _configuration;
         private readonly IDriver _driver;
 
-        public Neo4JHealthCheck(PrometheusConfiguration configuration, IHttpClientFactory factory, IDriver driver)
+        public Neo4JHealthCheck(PrometheusConfiguration configuration, IDriver driver)
         {
             _configuration = configuration;
             _driver = driver;
-
-            //_databaseAvailable = $"/db/{_configuration.Neo4JDatabase}/cluster/available";
-            //_databaseHealthy = $"/db/{_configuration.Neo4JDatabase}/cluster/status";
-            //_cluster = "/dbms/cluster/status";
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
