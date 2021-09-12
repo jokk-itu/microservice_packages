@@ -7,9 +7,6 @@ on:
     branches: [ master ]
 env:
   CONFIGURATION: Release
-  CORS: 'Jokk.Microservice.Cors'
-  POLLY: 'Jokk.Microservice.Polly'
-  SWAGGER: 'Jokk.Microservice.Swagger'
 
 jobs:
   build:
