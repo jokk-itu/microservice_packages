@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <AssemblyName>Jokk.Microservice.RateLimit</AssemblyName>
+        <RootNamespace>Jokk.Microservice.RateLimit</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AspNetCoreRateLimit" Version="4.0.1" />
+      <PackageReference Include="AspNetCoreRateLimit.Redis" Version="1.0.0" />
+    </ItemGroup>
+
+</Project>
