@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jokk.Microservice.Prometheu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jokk.Microservice.Cache", "Jokk.Microservice.Cache\Jokk.Microservice.Cache.csproj", "{6F7F6EC7-8495-422D-B8A5-0CB211C8C3E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jokk.Microservice.RateLimit", "Jokk.Microservice.RateLimit\Jokk.Microservice.RateLimit.csproj", "{7FEEBF50-2B1F-430F-AAD7-F9E40A991340}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
