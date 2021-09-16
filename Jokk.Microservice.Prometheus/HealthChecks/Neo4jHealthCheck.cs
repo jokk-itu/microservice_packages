@@ -34,7 +34,7 @@ namespace Jokk.Microservice.Prometheus.HealthChecks
                 });
                 return response is not null ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy();
             }
-            catch (Neo4jException exception)
+            catch (Neo4jException)
             {
                 return HealthCheckResult.Unhealthy();
             }

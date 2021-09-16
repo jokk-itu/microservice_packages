@@ -5,7 +5,7 @@ namespace Jokk.Microservice.Cache
 {
     public static class StartupExtensions
     {
-        public static IServiceCollection AddCacheStore(this IServiceCollection services)
+        public static IServiceCollection AddMicroserviceCache(this IServiceCollection services)
         {
             services.AddResponseCaching(options =>
             {
@@ -15,7 +15,7 @@ namespace Jokk.Microservice.Cache
             return services;
         }
 
-        public static IApplicationBuilder UseCacheStore(this IApplicationBuilder app)
+        public static IApplicationBuilder UseMicroserviceCache(this IApplicationBuilder app)
         {
             app.UseResponseCaching();
             return app;

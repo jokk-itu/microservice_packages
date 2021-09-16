@@ -3,19 +3,20 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageId>Jokk.Microservice.Cache</PackageId>
-        <AssemblyName>Jokk.Microservice.Cache</AssemblyName>
-        <Version>1.0.1</Version>
-        <Title>Cache</Title>
+        <PackageId>Jokk.Microservice.RateLimit</PackageId>
+        <AssemblyName>Jokk.Microservice.RateLimit</AssemblyName>
+        <Version>1.0.0</Version>
+        <Title>RateLimit</Title>
         <Authors>Joachim Kelsen</Authors>
         <Company>Jokk</Company>
-        <PackageDescription>A package which sets up Responsecaching for Startup in ASP.NET Core</PackageDescription>
+        <PackageDescription>A package which sets up Ratelimiting on Ip Addresses for Startup in ASP.NET Core</PackageDescription>
         <RepositoryUrl>https://github.com/jokk-itu/microservice_packages</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.ResponseCaching" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+      <PackageReference Include="RedLock.net" Version="2.3.1" />
     </ItemGroup>
 
 </Project>
