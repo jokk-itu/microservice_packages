@@ -1,7 +1,4 @@
 using System;
-using System.Drawing;
-using System.Threading.Tasks;
-using RedLockNet.SERedis;
 
 namespace Jokk.Microservice.RateLimit
 {
