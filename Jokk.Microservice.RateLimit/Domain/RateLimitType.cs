@@ -2,7 +2,7 @@ using System;
 
 namespace Jokk.Microservice.RateLimit
 {
-    public class RateLimitType
+    internal class RateLimitType
     {
         public long Value { get; set; }
 
@@ -20,6 +20,11 @@ namespace Jokk.Microservice.RateLimit
         public void Increment()
         {
             Value += 1;
+        }
+
+        public override string ToString()
+        {
+            return $"Value: {Value} & End: {End}";
         }
     }
 }

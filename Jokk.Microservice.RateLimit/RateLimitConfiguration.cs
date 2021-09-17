@@ -1,6 +1,6 @@
 namespace Jokk.Microservice.RateLimit
 {
-    public class RateLimitConfiguration
+    internal class RateLimitConfiguration
     {
         public string RedisConnectionString { get; set; }
         

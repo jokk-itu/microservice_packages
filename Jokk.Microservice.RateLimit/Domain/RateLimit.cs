@@ -2,7 +2,7 @@ using System;
 
 namespace Jokk.Microservice.RateLimit
 {
-    public class RateLimit
+    internal class RateLimit
     {
         private readonly RateLimitConfiguration _config;
 
@@ -37,6 +37,11 @@ namespace Jokk.Microservice.RateLimit
             Minute.ResetSurpassedRate(TimeSpan.FromMinutes(1));
             Hour.ResetSurpassedRate(TimeSpan.FromHours(1));
             Day.ResetSurpassedRate(TimeSpan.FromDays(1));
+        }
+
+        public override string ToString()
+        {
+            return $"{Minute}\n, {Hour}\n, \n{Day}";
         }
     }
 }

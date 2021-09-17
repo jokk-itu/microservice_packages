@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Jokk.Microservice.RateLimit.Extensions
 {
-    public static class HttpContextExtensions
+    internal static class HttpContextExtensions
     {
         public static string GetIpAddress(this HttpContext httpContext)
         {

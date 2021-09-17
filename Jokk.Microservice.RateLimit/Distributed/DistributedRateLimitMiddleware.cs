@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Http;
 
 namespace Jokk.Microservice.RateLimit
 {
-    public class RateLimitMiddleware
+    internal class DistributedRateLimitMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IpContext _context;
+        private readonly DistributedIpContext _context;
 
-        public RateLimitMiddleware(RequestDelegate next, IpContext context)
+        public DistributedRateLimitMiddleware(RequestDelegate next, DistributedIpContext context)
         {
             _next = next;
             _context = context;

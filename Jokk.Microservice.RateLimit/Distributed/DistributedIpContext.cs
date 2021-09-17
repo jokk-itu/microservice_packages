@@ -9,13 +9,13 @@ namespace Jokk.Microservice.RateLimit
     //IpAddress is a key in Redis
     //IpAddress is also a resource
     //Locks work on resources
-    public class IpContext
+    internal class DistributedIpContext
     {
         private readonly RedLockFactory _lockFactory;
         private readonly RateLimitConfiguration _config;
         private readonly IDatabaseAsync _db;
         
-        public IpContext(IConnectionMultiplexer conn, RedLockFactory lockFactory, RateLimitConfiguration config)
+        public DistributedIpContext(IConnectionMultiplexer conn, RedLockFactory lockFactory, RateLimitConfiguration config)
         {
             _lockFactory = lockFactory;
             _config = config;
