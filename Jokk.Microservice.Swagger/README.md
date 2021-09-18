@@ -1,24 +1,23 @@
-# RateLimit
+# Swagger
 
-Setup Ratelimiting for an API, either by using a concealed store with in-memory storage,\
-or by using a distributed store with a redis database.
-
-## Appsettings Code
-```
-
-```
+Setup Swagger support, by using Bearer tokens as authorization,\
+or anonymously with no authorization.\
+There is no support for multiple documents/versions.
 
 ## Startup Code
+<i>The order of function calls, does not matter.</i>
 ```
-private IConfiguration Configuration { get; }
-...
 public void ConfigureServices(IServiceCollection services)
 {
+    //Anonymous
+    services.AddSwaggerAnonymous();
     
+    //Bearer Authorization
+    services.AddSwaggerAuthorization();
 }
 ...
 public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 {
-    
+    app.UseMicroserviceSwagger();
 }
 ```

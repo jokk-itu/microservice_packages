@@ -6,17 +6,20 @@ namespace Jokk.Microservice.Swagger
 {
     public static class Setup
     {
-        public static IServiceCollection AddSwaggerAnonymous(this IServiceCollection services) => 
-            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo()
+        public static IServiceCollection AddSwaggerAnonymous(this IServiceCollection services) =>
+            services.AddSwaggerGen(options =>
             {
-                Title = "WebApi",
-                Version = "v1"
-            }));
+                options.SwaggerDoc("v1", new OpenApiInfo()
+                {
+                    Title = "WebApi",
+                    Version = "v1"
+                });
+            });
 
         public static IServiceCollection AddSwaggerAuthorization(this IServiceCollection services) =>
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "WebApi", Version = "v1"});
+                options.SwaggerDoc("v1", new OpenApiInfo {Title = "WebApi", Version = "v1"});
                 var securitySchema = new OpenApiSecurityScheme
                 {
                     Description =
@@ -31,17 +34,20 @@ namespace Jokk.Microservice.Swagger
                         Id = "Bearer"
                     }
                 };
-                c.AddSecurityDefinition("Bearer", securitySchema);
+                options.AddSecurityDefinition("Bearer", securitySchema);
                 var securityRequirement = new OpenApiSecurityRequirement
                 {
                     {securitySchema, new[] {"Bearer"}}
                 };
-                c.AddSecurityRequirement(securityRequirement);
+                options.AddSecurityRequirement(securityRequirement);
             });
 
         public static IApplicationBuilder UseMicroserviceSwagger(this IApplicationBuilder app) =>
             app.UseSwagger()
-               .UseSwaggerUI(c => 
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api v1"));
+                .UseSwaggerUI(options =>
+                {
+                    options.DisplayRequestDuration();
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Api v1");
+                });
     }
 }
