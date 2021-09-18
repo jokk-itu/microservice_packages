@@ -27,6 +27,7 @@ namespace Jokk.Microservice.Prometheus
 
             services.AddHealthChecks().ForwardToPrometheus();
             services.AddHttpClient(ClientName.HealthCheck).UseHttpClientMetrics();
+            //Add .UseHttpClientMetrics() to all HttpClients
             services.AddSystemMetrics();
             return services;
         }

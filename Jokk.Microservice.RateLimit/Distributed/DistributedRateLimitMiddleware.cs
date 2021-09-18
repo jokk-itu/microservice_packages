@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Jokk.Microservice.RateLimit.Extensions;
 using Microsoft.AspNetCore.Http;
 
-namespace Jokk.Microservice.RateLimit
+namespace Jokk.Microservice.RateLimit.Distributed
 {
     internal class DistributedRateLimitMiddleware
     {
@@ -17,7 +17,7 @@ namespace Jokk.Microservice.RateLimit
 
         public async Task InvokeAsync(HttpContext httpContext)
         {
-            var hasReachedLimit = await _context.UpdateRateAsync(httpContext.GetIpAddress());
+            var hasReachedLimit = await _context.TryUpdateRateAsync(httpContext.GetIpAddress());
             if (hasReachedLimit)
                 httpContext.Response.StatusCode = 429;
             else

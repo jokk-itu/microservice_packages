@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Jokk.Microservice.RateLimit.Concealed;
+using Jokk.Microservice.RateLimit.Distributed;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +15,10 @@ namespace Jokk.Microservice.RateLimit.Extensions
         public static IServiceCollection AddMicroserviceDistributedRateLimit(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddConfiguration(configuration);
-            services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(configuration["ConnectionString"]));
+            services.AddSingleton<IConnectionMultiplexer>(serviceProvider => 
+                ConnectionMultiplexer.Connect(
+                    serviceProvider.GetRequiredService<RateLimitConfiguration>().RedisConnectionString));
+            
             services.AddSingleton(serviceProvider => RedLockFactory.Create(new List<RedLockMultiplexer>
             {
                 new(serviceProvider.GetRequiredService<IConnectionMultiplexer>())
@@ -46,13 +50,9 @@ namespace Jokk.Microservice.RateLimit.Extensions
 
         private static IServiceCollection AddConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton(_ => new RateLimitConfiguration()
-            {
-                RedisConnectionString = configuration["ConnectionString"],
-                DayMax = long.Parse(configuration["DayMax"]),
-                HourMax = long.Parse(configuration["HourMax"]),
-                MinuteMax = long.Parse(configuration["MinuteMax"])
-            });
+            var config = new RateLimitConfiguration();
+            configuration.Bind(config);
+            services.AddSingleton(_ => config);
             return services;
         }
     }

@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Threading.Tasks;
 
 namespace Jokk.Microservice.RateLimit.Concealed
 {
@@ -21,9 +20,9 @@ namespace Jokk.Microservice.RateLimit.Concealed
             if (rateLimit.IsLimitReached())
                 return false;
 
-            var old = rateLimit;
+            var comparisonValue = rateLimit;
             rateLimit.IncrementValues();
-            if (_rateLimits.TryUpdate(ipAddress, rateLimit, old))
+            if (_rateLimits.TryUpdate(ipAddress, rateLimit, comparisonValue))
                 throw new UpdateConcurrencyException($"{ipAddress} with {rateLimit} cannot be updated");
             
             return true;
