@@ -13,8 +13,6 @@ namespace Jokk.Microservice.Prometheus
 
         public string MongoUri { get; set; }
 
-        public string MongoDatabase { get; set; }
-
         public string MongoUsername { get; set; }
 
         public string MongoPassword { get; set; }
@@ -24,8 +22,6 @@ namespace Jokk.Microservice.Prometheus
         #region Neo4J
 
         public string Neo4JUri { get; set; }
-
-        public string Neo4JDatabase { get; set; }
 
         public string Neo4JUsername { get; set; }
 
