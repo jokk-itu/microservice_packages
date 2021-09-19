@@ -17,11 +17,14 @@ namespace Jokk.Microservice.Log
         #region AccessConfiguration
 
         public string SeqUrl { get; set; }
+        
         public string ElasticSearchUrl { get; set; }
         public int UdpPort { get; set; }
         public string UdpHost { get; set; }
 
         #endregion
+        
+        public string Service { get; set; }
 
         public IDictionary<string, string> Overrides { get; set; }
     }

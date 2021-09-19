@@ -13,13 +13,13 @@ namespace Jokk.Microservice.Log.Extensions
 {
     public static class ProgramExtensions
     {
-        public static IHostBuilder AddMicroserviceLogging(this IHostBuilder host, string serviceName)
+        public static IHostBuilder AddMicroserviceLogging(this IHostBuilder host)
         {
             return host.UseSerilog((builderContext, services, loggerConfig) =>
             {
                 var logConfig = GetLogConfiguration(builderContext.Configuration);
                 ValidateConfig(logConfig);
-                ConfigureEnvironment(loggerConfig);
+                SetMinimumLevel(loggerConfig);
                 SetOverrideMinimumLevel(loggerConfig, logConfig);
                 SetSinks(loggerConfig, logConfig);
                 loggerConfig
@@ -31,7 +31,8 @@ namespace Jokk.Microservice.Log.Extensions
                     .Enrich.WithExceptionDetails()
                     .Enrich.WithSpan()
                     .Enrich.With<CorrelationIdEnricher>()
-                    .Enrich.WithProperty("Service", serviceName);
+                    .Enrich.With<EnvironmentEnricher>()
+                    .Enrich.WithProperty("Service", logConfig.Service);
             });
         }
 
@@ -43,7 +44,7 @@ namespace Jokk.Microservice.Log.Extensions
             return configuration;
         }
 
-        private static void ConfigureEnvironment(LoggerConfiguration logConfig)
+        private static void SetMinimumLevel(LoggerConfiguration logConfig)
         {
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if (environment == null)
@@ -53,8 +54,6 @@ namespace Jokk.Microservice.Log.Extensions
                 logConfig.MinimumLevel.Debug();
             else
                 logConfig.MinimumLevel.Warning();
-
-            logConfig.Enrich.WithProperty("Environment", environment);
         }
 
         private static void SetOverrideMinimumLevel(LoggerConfiguration loggerConfig, LogConfiguration logConfig)
