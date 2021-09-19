@@ -3,6 +3,7 @@ using System.Net.Http;
 using Jokk.Microservice.Prometheus.Constants;
 using Jokk.Microservice.Prometheus.HealthChecks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Neo4j.Driver;
 using Prometheus;
@@ -14,22 +15,33 @@ namespace Jokk.Microservice.Prometheus
     {
         public static IServiceCollection AddMicroservicePrometheus(
             this IServiceCollection services,
-            PrometheusConfiguration configuration)
+            IConfiguration configuration)
         {
-            ValidateServices(configuration);
-            ValidateMongo(configuration);
-            ValidateNeo4J(configuration);
-
-            AddNeo4J(services, configuration);
-            AddMongo(services, configuration);
-            AddSqlServer(services, configuration);
-            AddServiceHealthChecks(services, configuration);
+            var prometheusConfiguration = new PrometheusConfiguration();
+            configuration.Bind(prometheusConfiguration);
+            ValidateServices(prometheusConfiguration);
+            ValidateMongo(prometheusConfiguration);
+            ValidateNeo4J(prometheusConfiguration);
+            ValidateRedis(prometheusConfiguration);
+            
+            AddNeo4J(services, prometheusConfiguration);
+            AddMongo(services, prometheusConfiguration);
+            AddSqlServer(services, prometheusConfiguration);
+            AddRedis(services, prometheusConfiguration);
+            AddServiceHealthChecks(services, prometheusConfiguration);
 
             services.AddHealthChecks().ForwardToPrometheus();
             services.AddHttpClient(ClientName.HealthCheck).UseHttpClientMetrics();
             //Add .UseHttpClientMetrics() to all HttpClients
             services.AddSystemMetrics();
             return services;
+        }
+
+        private static void ValidateRedis(PrometheusConfiguration prometheusConfiguration)
+        {
+            if (!string.IsNullOrEmpty(prometheusConfiguration.RedisConnectionString)
+            && !Uri.IsWellFormedUriString(prometheusConfiguration.RedisConnectionString, UriKind.Absolute))
+                throw new ArgumentException("RedisConnectionString is ill formed", nameof(prometheusConfiguration));
         }
 
         private static void ValidateServices(PrometheusConfiguration configuration)
@@ -92,6 +104,12 @@ namespace Jokk.Microservice.Prometheus
         {
             if (!string.IsNullOrEmpty(configuration.SqlServerConnectionString))
                 services.AddHealthChecks().AddSqlServer(configuration.SqlServerConnectionString);
+        }
+        
+        private static void AddRedis(IServiceCollection services, PrometheusConfiguration prometheusConfiguration)
+        {
+            if (!string.IsNullOrEmpty(prometheusConfiguration.RedisConnectionString))
+                services.AddHealthChecks().AddCheck<RedisHealthCheck>(HealthCheckName.Redis);
         }
 
         /// <summary>

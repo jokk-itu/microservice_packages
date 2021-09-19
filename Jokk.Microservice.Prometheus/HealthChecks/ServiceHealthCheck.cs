@@ -7,7 +7,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Jokk.Microservice.Prometheus.HealthChecks
 {
-    public class ServiceHealthCheck : IHealthCheck
+    internal class ServiceHealthCheck : IHealthCheck
     {
         private readonly string _service;
         private readonly string _uri;
