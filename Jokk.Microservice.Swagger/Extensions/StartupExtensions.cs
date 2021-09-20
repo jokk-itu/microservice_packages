@@ -2,9 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-namespace Jokk.Microservice.Swagger
+namespace Jokk.Microservice.Swagger.Extensions
 {
-    public static class Setup
+    public static class StartupExtensions
     {
         public static IServiceCollection AddSwaggerAnonymous(this IServiceCollection services) =>
             services.AddSwaggerGen(options =>
