@@ -23,7 +23,7 @@ private IConfiguration Configuration { get; }
 public void ConfigureServices(IServiceCollection services)
 {
     //Concealed Store
-    services.AddMicroserviceConcealedRateLimit();
+    services.AddMicroserviceMemoryRateLimit();
     
     //Distributed Store
     services.AddMicroserviceDistributedRateLimit();
@@ -32,7 +32,7 @@ public void ConfigureServices(IServiceCollection services)
 public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 {
     //Concealed Store
-    app.UseMicroserviceConcealedRateLimit();
+    app.UseMicroserviceMemoryRateLimit();
     
     //Distributed Store
     app.UseMicroserviceDistributedRateLimit();
