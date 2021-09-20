@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Jokk.Microservice.Cors
+namespace Jokk.Microservice.Cors.Extensions
 {
-    public static class Setup
+    public static class StartupExtensions
     {
         private const string PolicyName = "microservice";
 

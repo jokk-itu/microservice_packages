@@ -1,7 +1,6 @@
-# RateLimit
+# Polly
 
-Setup Ratelimiting for an API, either by using a concealed store with in-memory storage,\
-or by using a distributed store with a redis database.
+
 
 ## Appsettings Code
 ```

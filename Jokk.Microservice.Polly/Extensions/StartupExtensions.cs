@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Extensions.Http;
 
-namespace Jokk.Microservice.Polly
+namespace Jokk.Microservice.Polly.Extensions
 {
     public static class Setup
     {
