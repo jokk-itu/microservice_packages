@@ -2,14 +2,14 @@ using System.Threading.Tasks;
 using Jokk.Microservice.RateLimit.Extensions;
 using Microsoft.AspNetCore.Http;
 
-namespace Jokk.Microservice.RateLimit.Concealed
+namespace Jokk.Microservice.RateLimit.Memory
 {
-    internal class ConcealedRateLimitMiddleware
+    internal class MemoryRateLimitMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ConcealedIpContext _context;
+        private readonly MemoryIpContext _context;
 
-        public ConcealedRateLimitMiddleware(RequestDelegate next, ConcealedIpContext context)
+        public MemoryRateLimitMiddleware(RequestDelegate next, MemoryIpContext context)
         {
             _next = next;
             _context = context;

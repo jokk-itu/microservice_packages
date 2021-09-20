@@ -1,13 +1,13 @@
 using System.Collections.Concurrent;
 
-namespace Jokk.Microservice.RateLimit.Concealed
+namespace Jokk.Microservice.RateLimit.Memory
 {
-    internal class ConcealedIpContext
+    internal class MemoryIpContext
     {
         private readonly RateLimitConfiguration _config;
         private readonly ConcurrentDictionary<string, RateLimit> _rateLimits;
 
-        public ConcealedIpContext(RateLimitConfiguration config)
+        public MemoryIpContext(RateLimitConfiguration config)
         {
             _config = config;
             _rateLimits = new ConcurrentDictionary<string, RateLimit>();

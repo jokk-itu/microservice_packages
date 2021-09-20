@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Jokk.Microservice.RateLimit.Concealed;
 using Jokk.Microservice.RateLimit.Distributed;
+using Jokk.Microservice.RateLimit.Memory;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,11 +28,11 @@ namespace Jokk.Microservice.RateLimit.Extensions
             return services;
         }
 
-        public static IServiceCollection AddMicroserviceConcealedRateLimit(this IServiceCollection services,
+        public static IServiceCollection AddMicroserviceMemoryRateLimit(this IServiceCollection services,
             IConfiguration configuration)
         {
             services.AddConfiguration(configuration);
-            services.AddSingleton<ConcealedIpContext>();
+            services.AddSingleton<MemoryIpContext>();
             return services;
         }
 
@@ -42,9 +42,9 @@ namespace Jokk.Microservice.RateLimit.Extensions
             return app;
         }
 
-        public static IApplicationBuilder UseMicroserviceConcealedRateLimit(this IApplicationBuilder app)
+        public static IApplicationBuilder UseMicroserviceMemoryRateLimit(this IApplicationBuilder app)
         {
-            app.UseMiddleware<ConcealedRateLimitMiddleware>();
+            app.UseMiddleware<MemoryRateLimitMiddleware>();
             return app;
         }
 
