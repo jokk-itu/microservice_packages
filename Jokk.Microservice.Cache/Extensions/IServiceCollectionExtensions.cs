@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Configuration;
+using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Jokk.Microservice.Cache.Extensions
@@ -7,20 +7,25 @@ namespace Jokk.Microservice.Cache.Extensions
     {
         public static IServiceCollection AddMicroserviceDistributedCache(
             this IServiceCollection services,
-            IConfiguration configuration)
+            CacheConfiguration configuration)
         {
+            services.AddTransient<ICacheStore, CacheStore>();
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = configuration["ConnectionString"];
-                options.InstanceName = "DistributedRedisCache";
+                options.ConfigurationOptions.EndPoints.Add(
+                    new DnsEndPoint(configuration.Host, configuration.Port));
+                options.ConfigurationOptions.Password = configuration.Password;
+                options.ConfigurationOptions.ConnectRetry = 3;
             });
             return services;
         }
         
         public static IServiceCollection AddMicroserviceMemoryCache(
-            this IServiceCollection services)
+            this IServiceCollection services,
+            CacheConfiguration configuration)
         {
-            services.AddMemoryCache();
+            services.AddTransient<ICacheStore, CacheStore>();
+            services.AddDistributedMemoryCache();
             return services;
         }
 
