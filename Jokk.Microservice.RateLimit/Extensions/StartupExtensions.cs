@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net;
 using Jokk.Microservice.RateLimit.Distributed;
 using Jokk.Microservice.RateLimit.Memory;
 using Microsoft.AspNetCore.Builder;
@@ -16,8 +17,17 @@ namespace Jokk.Microservice.RateLimit.Extensions
         {
             services.AddConfiguration(configuration);
             services.AddSingleton<IConnectionMultiplexer>(serviceProvider => 
-                ConnectionMultiplexer.Connect(
-                    serviceProvider.GetRequiredService<RateLimitConfiguration>().RedisConnectionString));
+                ConnectionMultiplexer.Connect(new ConfigurationOptions()
+                {
+                    ConnectRetry = 3,
+                    EndPoints =
+                    {
+                        new DnsEndPoint(
+                            serviceProvider.GetRequiredService<RateLimitConfiguration>().Host, 
+                            serviceProvider.GetRequiredService<RateLimitConfiguration>().Port)
+                    },
+                    Password = serviceProvider.GetRequiredService<RateLimitConfiguration>().Password
+                }));
             
             services.AddSingleton(serviceProvider => RedLockFactory.Create(new List<RedLockMultiplexer>
             {
@@ -50,9 +60,7 @@ namespace Jokk.Microservice.RateLimit.Extensions
 
         private static IServiceCollection AddConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            var config = new RateLimitConfiguration();
-            configuration.Bind(config);
-            services.AddSingleton(_ => config);
+            services.AddSingleton(_ => configuration.Get<RateLimitConfiguration>());
             return services;
         }
     }

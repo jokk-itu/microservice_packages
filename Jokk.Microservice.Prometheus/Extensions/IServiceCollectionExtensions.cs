@@ -2,16 +2,15 @@ using System;
 using System.Net.Http;
 using Jokk.Microservice.Prometheus.Constants;
 using Jokk.Microservice.Prometheus.HealthChecks;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Neo4j.Driver;
 using Prometheus;
 using Prometheus.SystemMetrics;
 
-namespace Jokk.Microservice.Prometheus
+namespace Jokk.Microservice.Prometheus.Extensions
 {
-    public static class StartupExtensions
+    public static class IServiceCollectionExtensions
     {
         public static IServiceCollection AddMicroservicePrometheus(
             this IServiceCollection services,
@@ -110,22 +109,6 @@ namespace Jokk.Microservice.Prometheus
         {
             if (!string.IsNullOrEmpty(prometheusConfiguration.RedisConnectionString))
                 services.AddHealthChecks().AddCheck<RedisHealthCheck>(HealthCheckName.Redis);
-        }
-
-        /// <summary>
-        /// Called after <code>app.UseRouting()</code>
-        /// </summary>
-        /// <param name="app"></param>
-        /// <returns></returns>
-        public static IApplicationBuilder UseMicroservicePrometheus(this IApplicationBuilder app)
-        {
-            app.UseHttpMetrics();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapHealthChecks(HealthCheckEndpoint.Endpoint);
-                endpoints.MapMetrics();
-            });
-            return app;
         }
     }
 }

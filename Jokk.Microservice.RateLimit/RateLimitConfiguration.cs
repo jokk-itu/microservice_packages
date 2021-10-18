@@ -2,8 +2,12 @@ namespace Jokk.Microservice.RateLimit
 {
     internal class RateLimitConfiguration
     {
-        public string RedisConnectionString { get; set; }
+        public string Host { get; set; }
         
+        public int Port { get; set; }
+        
+        public string Password { get; set; }
+
         public long MinuteMax {get; set;}
         
         public long HourMax { get; set; }
