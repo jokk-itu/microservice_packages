@@ -5,7 +5,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageId>Jokk.Microservice.Log</PackageId>
         <AssemblyName>Jokk.Microservice.Log</AssemblyName>
-        <Version>1.0.7</Version>
+        <Version>1.0.8</Version>
         <Title>Log</Title>
         <Authors>Joachim Kelsen</Authors>
         <Company>Jokk</Company>
@@ -22,6 +22,7 @@
       <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
       <PackageReference Include="Serilog.Exceptions" Version="7.0.0" />
       <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
+      <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.4.1" />
       <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.1" />
       <PackageReference Include="Serilog.Sinks.Udp" Version="7.1.0" />
     </ItemGroup>

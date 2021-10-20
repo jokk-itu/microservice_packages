@@ -2,7 +2,7 @@ using System;
 
 namespace Jokk.Microservice.Log.Exceptions
 {
-    internal class EnvironmentException : Exception
+    public class EnvironmentException : Exception
     {
         public EnvironmentException() : base() {}
         

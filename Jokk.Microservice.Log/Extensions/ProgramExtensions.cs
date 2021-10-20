@@ -15,7 +15,7 @@ namespace Jokk.Microservice.Log.Extensions
     {
         public static IHostBuilder AddMicroserviceLogging(this IHostBuilder host)
         {
-            return host.UseSerilog((builderContext, services, loggerConfig) =>
+            return host.UseSerilog((builderContext, _, loggerConfig) =>
             {
                 var logConfig = GetLogConfiguration(builderContext.Configuration);
                 ValidateConfig(logConfig);
@@ -69,6 +69,8 @@ namespace Jokk.Microservice.Log.Extensions
         {
             if (logConfig.LogToSeq)
                 loggerConfig.WriteTo.Seq(logConfig.SeqUrl);
+            if (logConfig.LogToElasticSearch)
+                loggerConfig.WriteTo.Elasticsearch(logConfig.ElasticSearchUrl);
             if (logConfig.LogToConsole)
                 loggerConfig.WriteTo.Console();
             if (logConfig.LogToUdp)
@@ -79,6 +81,9 @@ namespace Jokk.Microservice.Log.Extensions
         {
             if (logConfig.LogToSeq && !Uri.IsWellFormedUriString(logConfig.SeqUrl, UriKind.Absolute))
                 throw new ArgumentException($"{logConfig.SeqUrl} is ill formatted");
+            
+            if (logConfig.LogToElasticSearch && !Uri.IsWellFormedUriString(logConfig.ElasticSearchUrl, UriKind.Absolute))
+                throw new ArgumentException($"{logConfig.ElasticSearchUrl} is ill formatted");
         }
     }
 }
