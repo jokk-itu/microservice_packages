@@ -21,8 +21,7 @@ namespace Jokk.Microservice.Cache.Extensions
         }
         
         public static IServiceCollection AddMicroserviceMemoryCache(
-            this IServiceCollection services,
-            CacheConfiguration configuration)
+            this IServiceCollection services)
         {
             services.AddTransient<ICacheStore, CacheStore>();
             services.AddDistributedMemoryCache();

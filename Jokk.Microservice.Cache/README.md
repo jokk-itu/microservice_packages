@@ -6,7 +6,9 @@ or using Redis with the Distributed solution.
 <i>Properties are optional regarding the chosen solution</i>
 ```
 "Cache" {
-    "ConnectionString": "redis://localhost:6371"
+    "Host": "localhost",
+    "Port": "6371",
+    "Password": "password"
 }
 ```
 
@@ -17,10 +19,22 @@ private IConfiguration Configuration { get; }
 ...
 public void ConfigureServices(IServiceCollection services)
 {
-    //Concealed Caching
+    var configuration = Configuration.GetSection("Cache").Get<CacheConfiguration>();
+    
+    //Memory Caching
     app.AddMicroserviceMemoryCaching();
     
     //Distributed Caching
-    app.AddMicroserviceDistributedCaching();
+    app.AddMicroserviceDistributedCaching(configuration);
+    
+    //Client Caching
+    app.AddMicroserviceClientCache();
+}
+
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+{
+    ...
+    app.UseMicroserviceClientCache();
+    ...
 }
 ```

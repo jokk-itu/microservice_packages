@@ -5,7 +5,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageId>Jokk.Microservice.Cache</PackageId>
         <AssemblyName>Jokk.Microservice.Cache</AssemblyName>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <Title>Cache</Title>
         <Authors>Joachim Kelsen</Authors>
         <Company>Jokk</Company>
