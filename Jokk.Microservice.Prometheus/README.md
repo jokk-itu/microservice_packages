@@ -5,6 +5,7 @@ Also sets up healthchecks, which will be monitored.\
 As well as outgoing HTTP requests and system metrics.
 
 ## Appsettings Code
+
 <i>The following settings are optional.\
 Services are a collection URI's which will be health checked,\
 on the following relative path: '/health'.\
@@ -23,12 +24,20 @@ SQLServer, Mongo, Neo4j and Redis are also used for healthchecks.
     "Neo4jUri": "neo4j://localhost:3000",
     "Neo4jUsername": "username",
     "Neo4jPassword": "password",
-    "RedisConnectionString: "redis://localhost:6379",
-    "RedisDatabase": "database"
+    "Redis": {
+        "InstanceName": {
+            "Host": "localhost",
+            "Port": 6371,
+            "Password": "password",
+            "DatabaseId": 1
+        },
+        ...
+    }
 }
 ```
 
 ## Startup Code
+
 <i>The following code does not need a call order</i>
 ```
 private IConfiguration Configuration { get; }

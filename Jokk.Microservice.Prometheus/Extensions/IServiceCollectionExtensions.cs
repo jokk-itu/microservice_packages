@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Neo4j.Driver;
 using Prometheus;
 using Prometheus.SystemMetrics;
+using StackExchange.Redis;
 
 namespace Jokk.Microservice.Prometheus.Extensions
 {
@@ -91,12 +92,12 @@ namespace Jokk.Microservice.Prometheus.Extensions
 
         private static void AddMongo(IServiceCollection services, PrometheusConfiguration configuration)
         {
-            if (!string.IsNullOrEmpty(configuration.MongoUri))
-            {
-                var connectionString = configuration.MongoUri.Split("://");
-                connectionString.SetValue($"{configuration.MongoUsername}:{configuration.MongoPassword}@", 1);
-                services.AddHealthChecks().AddMongoDb(connectionString.ToString());
-            }
+            if (string.IsNullOrEmpty(configuration.MongoUri)) 
+                return;
+            
+            var connectionString = configuration.MongoUri.Split("://");
+            connectionString.SetValue($"{configuration.MongoUsername}:{configuration.MongoPassword}@", 1);
+            services.AddHealthChecks().AddMongoDb(connectionString.ToString());
         }
 
         private static void AddSqlServer(IServiceCollection services, PrometheusConfiguration configuration)

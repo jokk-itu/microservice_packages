@@ -17,8 +17,7 @@ namespace Jokk.Microservice.Prometheus.HealthChecks
             _config = config;
         }
 
-
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var db = _conn.GetDatabase();
             try
