@@ -11,9 +11,9 @@ using StackExchange.Redis;
 
 namespace Jokk.Microservice.RateLimit.Extensions
 {
-    public static class StartupExtensions
+    public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddMicroserviceDistributedRateLimit(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddMicroserviceDistributedRateLimit(this IServiceCollection services, RateLimitConfiguration configuration)
         {
             services.AddConfiguration(configuration);
             services.AddSingleton<IConnectionMultiplexer>(serviceProvider => 
@@ -39,7 +39,7 @@ namespace Jokk.Microservice.RateLimit.Extensions
         }
 
         public static IServiceCollection AddMicroserviceMemoryRateLimit(this IServiceCollection services,
-            IConfiguration configuration)
+            RateLimitConfiguration configuration)
         {
             services.AddConfiguration(configuration);
             services.AddSingleton<MemoryIpContext>();
@@ -58,9 +58,9 @@ namespace Jokk.Microservice.RateLimit.Extensions
             return app;
         }
 
-        private static IServiceCollection AddConfiguration(this IServiceCollection services, IConfiguration configuration)
+        private static IServiceCollection AddConfiguration(this IServiceCollection services, RateLimitConfiguration configuration)
         {
-            services.AddSingleton(_ => configuration.Get<RateLimitConfiguration>());
+            services.AddSingleton(_ => configuration);
             return services;
         }
     }

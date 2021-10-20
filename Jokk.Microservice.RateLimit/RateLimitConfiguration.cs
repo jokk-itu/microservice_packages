@@ -1,6 +1,6 @@
 namespace Jokk.Microservice.RateLimit
 {
-    internal class RateLimitConfiguration
+    public class RateLimitConfiguration
     {
         public string Host { get; set; }
         

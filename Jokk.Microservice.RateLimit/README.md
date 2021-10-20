@@ -22,16 +22,17 @@ private IConfiguration Configuration { get; }
 ...
 public void ConfigureServices(IServiceCollection services)
 {
-    //Concealed Store
-    services.AddMicroserviceMemoryRateLimit();
+    var configuration = Configuration.GetSection("RateLimit").Get<RateLimitConfiguration>();
+    //Memory Store
+    services.AddMicroserviceMemoryRateLimit(configuration);
     
     //Distributed Store
-    services.AddMicroserviceDistributedRateLimit();
+    services.AddMicroserviceDistributedRateLimit(configuration);
 }
 ...
 public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 {
-    //Concealed Store
+    //Memory Store
     app.UseMicroserviceMemoryRateLimit();
     
     //Distributed Store
