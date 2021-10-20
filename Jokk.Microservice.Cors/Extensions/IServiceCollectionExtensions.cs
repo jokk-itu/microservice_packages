@@ -1,26 +1,27 @@
 ﻿using System.Linq;
+using System.Reflection.PortableExecutable;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Jokk.Microservice.Cors.Extensions
 {
-    public static class StartupExtensions
+    public static class IServiceCollectionExtensions
     {
         private const string PolicyName = "microservice";
 
-        public static IServiceCollection AddMicroserviceCors(this IServiceCollection services, IConfiguration hosts, IConfiguration methods = null)
+        public static IServiceCollection AddMicroserviceCors(this IServiceCollection services, CorsConfiguration configuration)
         {
             return services.AddCors(options =>
             {
                 options.AddPolicy(PolicyName, policy =>
                 {
-                    policy.WithOrigins(hosts.GetChildren().Select(host => host.Value).ToArray())
+                    policy.WithOrigins(configuration.Services.ToArray())
                         .AllowAnyHeader();
-                    if (methods == null)
+                    if (configuration.Methods is null)
                         policy.AllowAnyMethod();
                     else
-                        policy.WithMethods(methods.GetChildren().Select(method => method.Value).ToArray());
+                        policy.WithMethods(configuration.Methods.ToArray());
                 });
             });
         }
