@@ -16,7 +16,8 @@ or by using a distributed store with a redis database.
 ## Startup Code
 <i>Using the service should be one of the first services to be used.\
 It is important that the RateLimit service,\
-is registered as one of the first middlewares.</i>
+is registered as one of the first middlewares.
+Therefore must also be called before UseRouting().</i>
 ```
 private IConfiguration Configuration { get; }
 ...

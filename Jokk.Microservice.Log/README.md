@@ -27,7 +27,7 @@ The header is: X-Correlation-Id'.
 ```
 
 ## Startup Code
-<i>There is no call order.</i>
+<i>UseMicroServiceLogging() must be called before UseRouting().</i>
 ```
 private IConfiguration Configuration { get; }
 ...

@@ -13,7 +13,7 @@ or using Redis with the Distributed solution.
 ```
 
 ## Startup
-<i>Either add the Concealed or Distributed cache solution</i>
+<i>Either add the Memory or Distributed cache solution</i>
 ```
 private IConfiguration Configuration { get; }
 ...

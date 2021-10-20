@@ -7,7 +7,7 @@ using Serilog;
 
 namespace Jokk.Microservice.Log.Extensions
 {
-    public static class StartupExtensions
+    public static class IServiceCollectionExtensions
     {
         public static IServiceCollection AddMicroserviceLogging(this IServiceCollection services)
         {
