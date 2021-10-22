@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Jokk.Microservice.RateLimit.Exceptions;
 
 namespace Jokk.Microservice.RateLimit.Memory
 {

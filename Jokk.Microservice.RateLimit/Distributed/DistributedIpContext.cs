@@ -23,7 +23,7 @@ namespace Jokk.Microservice.RateLimit.Distributed
         public async Task<bool> TryUpdateRateAsync(string ipAddress)
         {
             if (string.IsNullOrEmpty(ipAddress))
-                throw new ArgumentException("IPAddress must be given", nameof(ipAddress));
+                throw new ArgumentException(nameof(ipAddress));
             
             var expires = TimeSpan.FromSeconds(3);
             var wait = TimeSpan.FromSeconds(5);
@@ -32,14 +32,12 @@ namespace Jokk.Microservice.RateLimit.Distributed
             var (isLimitReached, rateLimit) = await IsLimitReachedAsync(ipAddress);
             
             await using var redisLock = await _lockFactory.CreateLockAsync(ipAddress, expires, wait, retry);
-            if (redisLock.IsAcquired && !isLimitReached)
-            {
-                rateLimit.IncrementValues();
-                return await _db.StringSetAsync(
-                    ipAddress, JsonSerializer.Serialize(rateLimit));
-            }
-
-            return false;
+            if (!redisLock.IsAcquired || isLimitReached) 
+                return false;
+            
+            rateLimit.IncrementValues();
+            return await _db.StringSetAsync(
+                ipAddress, JsonSerializer.Serialize(rateLimit));
         }
 
         private async Task<(bool, RateLimit)> IsLimitReachedAsync(string ipAddress)

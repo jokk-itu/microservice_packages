@@ -1,8 +1,8 @@
 using System;
 
-namespace Jokk.Microservice.RateLimit
+namespace Jokk.Microservice.RateLimit.Exceptions
 {
-    internal class UpdateConcurrencyException : Exception
+    public class UpdateConcurrencyException : Exception
     {
         public UpdateConcurrencyException(string message) : base(message)
         {

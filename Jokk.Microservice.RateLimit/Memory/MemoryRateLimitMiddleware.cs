@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Jokk.Microservice.RateLimit.Exceptions;
 using Jokk.Microservice.RateLimit.Extensions;
 using Microsoft.AspNetCore.Http;
 

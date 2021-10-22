@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Sockets;
 using Jokk.Microservice.Log.Enrichers;
 using Jokk.Microservice.Log.Exceptions;
@@ -17,7 +18,7 @@ namespace Jokk.Microservice.Log.Extensions
         {
             return host.UseSerilog((builderContext, _, loggerConfig) =>
             {
-                var logConfig = GetLogConfiguration(builderContext.Configuration);
+                var logConfig = builderContext.Configuration.GetSection("Logging").Get<LogConfiguration>();
                 ValidateConfig(logConfig);
                 SetMinimumLevel(loggerConfig);
                 SetOverrideMinimumLevel(loggerConfig, logConfig);
@@ -36,14 +37,6 @@ namespace Jokk.Microservice.Log.Extensions
             });
         }
 
-        private static LogConfiguration GetLogConfiguration(IConfiguration appSettings)
-        {
-            var configuration = new LogConfiguration();
-            appSettings.Bind("Logging", configuration);
-
-            return configuration;
-        }
-
         private static void SetMinimumLevel(LoggerConfiguration logConfig)
         {
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -58,9 +51,12 @@ namespace Jokk.Microservice.Log.Extensions
 
         private static void SetOverrideMinimumLevel(LoggerConfiguration loggerConfig, LogConfiguration logConfig)
         {
-            foreach (var (name, url) in logConfig.Overrides)
+            if (logConfig.Overrides is null || !logConfig.Overrides.Any())
+                return;
+            
+            foreach (var (name, level) in logConfig.Overrides)
             {
-                var logEventLevel = Enum.Parse<LogEventLevel>(url);
+                var logEventLevel = Enum.Parse<LogEventLevel>(level);
                 loggerConfig.MinimumLevel.Override(name, logEventLevel);
             }
         }
