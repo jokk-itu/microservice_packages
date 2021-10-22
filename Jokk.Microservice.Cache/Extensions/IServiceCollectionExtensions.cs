@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +10,7 @@ namespace Jokk.Microservice.Cache.Extensions
             this IServiceCollection services,
             CacheConfiguration configuration)
         {
+            ValidateConfig(configuration);
             services.AddTransient<ICacheStore, CacheStore>();
             services.AddStackExchangeRedisCache(options =>
             {
@@ -19,7 +21,13 @@ namespace Jokk.Microservice.Cache.Extensions
             });
             return services;
         }
-        
+
+        private static void ValidateConfig(CacheConfiguration configuration)
+        {
+            if (configuration.Host is null || configuration.Password is null)
+                throw new ArgumentException("Host and Password must be set", nameof(configuration));
+        }
+
         public static IServiceCollection AddMicroserviceMemoryCache(
             this IServiceCollection services)
         {

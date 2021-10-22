@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using Jokk.Microservice.RateLimit.Distributed;
@@ -16,18 +17,19 @@ namespace Jokk.Microservice.RateLimit.Extensions
         public static IServiceCollection AddMicroserviceDistributedRateLimit(this IServiceCollection services, RateLimitConfiguration configuration)
         {
             services.AddConfiguration(configuration);
-            services.AddSingleton<IConnectionMultiplexer>(serviceProvider => 
-                ConnectionMultiplexer.Connect(new ConfigurationOptions()
-                {
-                    ConnectRetry = 3,
-                    EndPoints =
-                    {
-                        new DnsEndPoint(
-                            serviceProvider.GetRequiredService<RateLimitConfiguration>().Host, 
-                            serviceProvider.GetRequiredService<RateLimitConfiguration>().Port)
-                    },
-                    Password = serviceProvider.GetRequiredService<RateLimitConfiguration>().Password
-                }));
+            services.AddSingleton<IConnectionMultiplexer>(serviceProvider =>
+                ConnectionMultiplexer.Connect(new ConfigurationOptions
+                        {
+                            ConnectRetry = 3,
+                            EndPoints =
+                            {
+                                new DnsEndPoint(
+                                    configuration.Host,
+                                    configuration.Port)
+                            },
+                            Password = serviceProvider.GetRequiredService<RateLimitConfiguration>().Password
+                        }
+                    ));
             
             services.AddSingleton(serviceProvider => RedLockFactory.Create(new List<RedLockMultiplexer>
             {
@@ -58,10 +60,11 @@ namespace Jokk.Microservice.RateLimit.Extensions
             return app;
         }
 
-        private static IServiceCollection AddConfiguration(this IServiceCollection services, RateLimitConfiguration configuration)
+        private static void AddConfiguration(this IServiceCollection services, RateLimitConfiguration configuration)
         {
+            if (configuration.Host is null || configuration.Password is null)
+                throw new ArgumentException("Host and Password must be set", nameof(configuration));
             services.AddSingleton(_ => configuration);
-            return services;
         }
     }
 }

@@ -19,7 +19,6 @@ namespace Jokk.Microservice.Log.Extensions
             return host.UseSerilog((builderContext, _, loggerConfig) =>
             {
                 var logConfig = builderContext.Configuration.GetSection("Logging").Get<LogConfiguration>();
-                ValidateConfig(logConfig);
                 SetMinimumLevel(loggerConfig);
                 SetOverrideMinimumLevel(loggerConfig, logConfig);
                 SetSinks(loggerConfig, logConfig);
@@ -63,23 +62,24 @@ namespace Jokk.Microservice.Log.Extensions
 
         private static void SetSinks(LoggerConfiguration loggerConfig, LogConfiguration logConfig)
         {
-            if (logConfig.LogToSeq)
+            if (logConfig.LogToSeq 
+                && logConfig.SeqUrl is not null 
+                && IsValidUri(logConfig.SeqUrl))
                 loggerConfig.WriteTo.Seq(logConfig.SeqUrl);
-            if (logConfig.LogToElasticSearch)
+            
+            if (logConfig.LogToElasticSearch 
+                && logConfig.ElasticSearchUrl is not null 
+                && IsValidUri(logConfig.ElasticSearchUrl))
                 loggerConfig.WriteTo.Elasticsearch(logConfig.ElasticSearchUrl);
+            
             if (logConfig.LogToConsole)
                 loggerConfig.WriteTo.Console();
-            if (logConfig.LogToUdp)
+            
+            if (logConfig.LogToUdp && logConfig.UdpHost is not null)
                 loggerConfig.WriteTo.Udp(logConfig.UdpHost, logConfig.UdpPort, AddressFamily.InterNetwork);
         }
 
-        private static void ValidateConfig(LogConfiguration logConfig)
-        {
-            if (logConfig.LogToSeq && !Uri.IsWellFormedUriString(logConfig.SeqUrl, UriKind.Absolute))
-                throw new ArgumentException($"{logConfig.SeqUrl} is ill formatted");
-            
-            if (logConfig.LogToElasticSearch && !Uri.IsWellFormedUriString(logConfig.ElasticSearchUrl, UriKind.Absolute))
-                throw new ArgumentException($"{logConfig.ElasticSearchUrl} is ill formatted");
-        }
+        private static bool IsValidUri(string uri)
+            => !Uri.IsWellFormedUriString(uri, UriKind.Absolute);
     }
 }

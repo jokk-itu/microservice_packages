@@ -16,12 +16,17 @@ namespace Jokk.Microservice.Cors.Extensions
             {
                 options.AddPolicy(PolicyName, policy =>
                 {
-                    policy.WithOrigins(configuration.Services.ToArray())
-                        .AllowAnyHeader();
+                    if (services.Any())
+                        policy.WithOrigins(configuration.Services.ToArray());
+                    else
+                        policy.AllowAnyOrigin();
+                            
                     if (configuration.Methods is null)
                         policy.AllowAnyMethod();
                     else
                         policy.WithMethods(configuration.Methods.ToArray());
+                    
+                    policy.AllowAnyHeader();
                 });
             });
         }
