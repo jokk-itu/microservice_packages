@@ -21,10 +21,10 @@ namespace Jokk.Microservice.Cache
 
         public async Task<T> GetValueAsync<T>(HttpContext httpContext, CancellationToken cancellationToken = default)
         {
-            var value = await _cacheStore.GetStringAsync(httpContext.Request.Path, token: cancellationToken);
-            _logger.LogDebug("Got value {} by key {}", value, httpContext.Request.Path);
-            var json = JsonSerializer.Deserialize<T>(value);
-            return json ?? throw new ArgumentException(
+            var json = await _cacheStore.GetStringAsync(httpContext.Request.Path, cancellationToken);
+            _logger.LogDebug("Got value {} by key {}", json, httpContext.Request.Path);
+            var value = JsonSerializer.Deserialize<T>(json);
+            return value ?? throw new ArgumentException(
                 "The fetched value is not serializable to type T", typeof(T).ToString());
         }
 

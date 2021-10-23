@@ -2,27 +2,25 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Jokk.Microservice.Prometheus.Constants;
+using Jokk.Microservice.HealthCheck.Constants;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace Jokk.Microservice.Prometheus.HealthChecks
+namespace Jokk.Microservice.HealthCheck.HealthChecks
 {
     internal class ServiceHealthCheck : IHealthCheck
     {
         private readonly string _service;
-        private readonly string _uri;
         private readonly HttpClient _httpClient;
 
-        public ServiceHealthCheck(IHttpClientFactory factory, string service, string uri)
+        public ServiceHealthCheck(IHttpClientFactory factory, string service, Uri uri)
         {
             _service = service;
-            _uri = uri;
             _httpClient = factory.CreateClient(ClientName.HealthCheck);
-            _httpClient.BaseAddress = new Uri(_uri);
+            _httpClient.BaseAddress = uri;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
-            CancellationToken cancellationToken = new CancellationToken())
+            CancellationToken cancellationToken = default)
         {
             var response = await _httpClient.GetAsync(HealthCheckEndpoint.Endpoint, cancellationToken);
             return response.IsSuccessStatusCode

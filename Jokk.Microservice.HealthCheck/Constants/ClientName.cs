@@ -1,4 +1,4 @@
-namespace Jokk.Microservice.Prometheus.Constants
+namespace Jokk.Microservice.HealthCheck.Constants
 {
     public static class ClientName
     {

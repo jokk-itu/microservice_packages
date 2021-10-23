@@ -4,7 +4,6 @@ using System.Net;
 using Jokk.Microservice.RateLimit.Distributed;
 using Jokk.Microservice.RateLimit.Memory;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RedLockNet.SERedis;
 using RedLockNet.SERedis.Configuration;

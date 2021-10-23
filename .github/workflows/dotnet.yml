@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: 
-        projects: ['Jokk.Microservice.Cors', 'Jokk.Microservice.Polly', 'Jokk.Microservice.Swagger', 'Jokk.Microservice.Log', 'Jokk.Microservice.Prometheus', 'Jokk.Microservice.Cache', 'Jokk.Microservice.RateLimit']
+        projects: ['Jokk.Microservice.Cors', 'Jokk.Microservice.Polly', 'Jokk.Microservice.Swagger', 'Jokk.Microservice.Log', 'Jokk.Microservice.Prometheus', 'Jokk.Microservice.Cache', 'Jokk.Microservice.RateLimit', 'Jokk.Microservice.HealthCheck']
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
