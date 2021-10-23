@@ -81,6 +81,6 @@ namespace Jokk.Microservice.Log.Extensions
         }
 
         private static bool IsValidUri(string uri)
-            => !Uri.IsWellFormedUriString(uri, UriKind.Absolute);
+            => Uri.IsWellFormedUriString(uri, UriKind.Absolute);
     }
 }
