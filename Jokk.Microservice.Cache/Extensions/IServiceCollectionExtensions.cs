@@ -10,6 +10,7 @@ namespace Jokk.Microservice.Cache.Extensions
             this IServiceCollection services,
             CacheConfiguration configuration)
         {
+            services.AddSingleton(configuration);
             ValidateConfig(configuration);
             services.AddTransient<ICacheStore, CacheStore>();
             services.AddStackExchangeRedisCache(options =>

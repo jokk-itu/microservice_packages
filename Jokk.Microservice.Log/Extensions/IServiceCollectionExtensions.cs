@@ -9,8 +9,9 @@ namespace Jokk.Microservice.Log.Extensions
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddMicroserviceLogging(this IServiceCollection services)
+        public static IServiceCollection AddMicroserviceLogging(this IServiceCollection services, LogConfiguration logConfiguration)
         {
+            services.AddSingleton(logConfiguration);
             services.AddHttpContextAccessor();
             services.ConfigureAll<HttpClientFactoryOptions>(options =>
             {
@@ -27,11 +28,7 @@ namespace Jokk.Microservice.Log.Extensions
 
         public static IApplicationBuilder UseMicroserviceLogging(this IApplicationBuilder app)
         {
-            app.UseSerilogRequestLogging((options) =>
-            {
-                options.EnrichDiagnosticContext = (diagnosticsContext, httpContext) =>
-                {};
-            });
+            app.UseSerilogRequestLogging();
             app.UseMiddleware<CorrelationIdMiddleware>();
             return app;
         }

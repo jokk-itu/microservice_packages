@@ -5,7 +5,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Jokk.Microservice.Cors</PackageId>
     <AssemblyName>Jokk.Microservice.Cors</AssemblyName>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <Title>Cors</Title>
     <Authors>Joachim Kelsen</Authors>
     <Company>Jokk</Company>

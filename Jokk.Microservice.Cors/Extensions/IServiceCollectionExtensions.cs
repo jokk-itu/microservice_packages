@@ -12,6 +12,7 @@ namespace Jokk.Microservice.Cors.Extensions
 
         public static IServiceCollection AddMicroserviceCors(this IServiceCollection services, CorsConfiguration configuration)
         {
+            services.AddSingleton(configuration);
             return services.AddCors(options =>
             {
                 options.AddPolicy(PolicyName, policy =>

@@ -15,10 +15,9 @@ namespace Jokk.Microservice.Prometheus.Extensions
     {
         public static IServiceCollection AddMicroservicePrometheus(
             this IServiceCollection services,
-            IConfiguration configuration)
+            PrometheusConfiguration prometheusConfiguration)
         {
-            var prometheusConfiguration = new PrometheusConfiguration();
-            configuration.Bind(prometheusConfiguration);
+            services.AddSingleton(prometheusConfiguration);
             ValidateServices(prometheusConfiguration);
             ValidateMongo(prometheusConfiguration);
             ValidateNeo4J(prometheusConfiguration);

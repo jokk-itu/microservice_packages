@@ -64,7 +64,7 @@ namespace Jokk.Microservice.RateLimit.Extensions
         {
             if (configuration.Host is null || configuration.Password is null)
                 throw new ArgumentException("Host and Password must be set", nameof(configuration));
-            services.AddSingleton(_ => configuration);
+            services.AddSingleton(configuration);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using Jokk.Microservice.Log.Enrichers;
 using Jokk.Microservice.Log.Exceptions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Enrichers.Span;
@@ -16,9 +17,9 @@ namespace Jokk.Microservice.Log.Extensions
     {
         public static IHostBuilder AddMicroserviceLogging(this IHostBuilder host)
         {
-            return host.UseSerilog((builderContext, _, loggerConfig) =>
+            return host.UseSerilog((_, serviceProvider, loggerConfig) =>
             {
-                var logConfig = builderContext.Configuration.GetSection("Logging").Get<LogConfiguration>();
+                var logConfig = serviceProvider.GetRequiredService<LogConfiguration>();
                 SetMinimumLevel(loggerConfig);
                 SetOverrideMinimumLevel(loggerConfig, logConfig);
                 SetSinks(loggerConfig, logConfig);
@@ -36,16 +37,16 @@ namespace Jokk.Microservice.Log.Extensions
             });
         }
 
-        private static void SetMinimumLevel(LoggerConfiguration logConfig)
+        private static void SetMinimumLevel(LoggerConfiguration loggerConfig)
         {
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if (environment == null)
                 throw new EnvironmentException("ASPNETCORE_ENVIRONMENT is not set");
 
             if (environment!.Equals(Environments.Development))
-                logConfig.MinimumLevel.Debug();
+                loggerConfig.MinimumLevel.Debug();
             else
-                logConfig.MinimumLevel.Warning();
+                loggerConfig.MinimumLevel.Warning();
         }
 
         private static void SetOverrideMinimumLevel(LoggerConfiguration loggerConfig, LogConfiguration logConfig)
