@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using System.Reflection.PortableExecutable;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Jokk.Microservice.Cors.Extensions
@@ -20,8 +19,8 @@ namespace Jokk.Microservice.Cors.Extensions
                     if (services.Any())
                         policy.WithOrigins(configuration.Services.ToArray());
                     else
-                        policy.AllowAnyOrigin();
-                            
+                        throw new ArgumentException("Services must be non-empty", nameof(configuration));
+
                     if (configuration.Methods is null)
                         policy.AllowAnyMethod();
                     else
