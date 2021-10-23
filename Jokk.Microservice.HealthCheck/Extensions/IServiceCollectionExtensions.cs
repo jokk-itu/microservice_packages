@@ -16,29 +16,29 @@ namespace Jokk.Microservice.HealthCheck.Extensions
             return services.AddHealthChecks().AddCheck<ServiceHealthCheck>(name);
         }
 
-        public static IHealthChecksBuilder AddNeo4jHealthCheck(this ServiceCollection services, string healthCheckName)
+        public static IHealthChecksBuilder AddNeo4JHealthCheck(this IServiceCollection services, string healthCheckName)
         {
             services.AddTransient(serviceProvider =>
                 new Neo4JHealthCheck(serviceProvider.GetRequiredService<IDriver>()));
             return services.AddHealthChecks().AddCheck<Neo4JHealthCheck>(healthCheckName);
         }
 
-        public static IHealthChecksBuilder AddMongoHealthCheck(this ServiceCollection services, string connectionString)
+        public static IHealthChecksBuilder AddMongoHealthCheck(this IServiceCollection services, string connectionString)
         {
             return services.AddHealthChecks().AddMongoDb(connectionString);
         }
         
-        public static IHealthChecksBuilder AddSqlServerHealthCheck(this ServiceCollection services, string connectionString)
+        public static IHealthChecksBuilder AddSqlServerHealthCheck(this IServiceCollection services, string connectionString)
         {
             return services.AddHealthChecks().AddSqlServer(connectionString);
         }
         
-        public static IHealthChecksBuilder AddRedisHealthCheck(this ServiceCollection services, string connectionString)
+        public static IHealthChecksBuilder AddRedisHealthCheck(this IServiceCollection services, string connectionString)
         {
             return services.AddHealthChecks().AddRedis(connectionString);
         }
         
-        public static IHealthChecksBuilder AddRabbitMqHealthCheck(this ServiceCollection services)
+        public static IHealthChecksBuilder AddRabbitMqHealthCheck(this IServiceCollection services)
         {
             return services.AddHealthChecks().AddRabbitMQ();
         }
