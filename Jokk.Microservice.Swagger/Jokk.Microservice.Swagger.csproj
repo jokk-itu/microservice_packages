@@ -5,7 +5,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     	<PackageId>Jokk.Microservice.Swagger</PackageId>
         <AssemblyName>Jokk.Microservice.Swagger</AssemblyName>
-        <Version>1.0.2</Version>
+        <Version>1.0.3</Version>
     	<Title>Swagger</Title>
     	<Authors>Joachim Kelsen</Authors>
     	<Company>Jokk</Company>
@@ -15,6 +15,8 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
       <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.1.5" />
       <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.5" />
